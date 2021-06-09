@@ -10,7 +10,7 @@
 
 # misc
 .env
-.end.production
+.env.production
 .env.local
 .env.development.local
 .env.test.local
