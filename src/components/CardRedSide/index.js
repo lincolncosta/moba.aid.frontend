@@ -1,0 +1,1 @@
+export { CardRedSide } from './CardRedSide'
