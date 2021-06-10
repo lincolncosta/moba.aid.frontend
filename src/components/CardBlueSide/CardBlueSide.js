@@ -27,7 +27,6 @@ const Card = styled(Box)`
     css`
       padding-left: 10px;
       border-left: 8px solid cyan;
-      cursor: pointer;
     `}
 `
 

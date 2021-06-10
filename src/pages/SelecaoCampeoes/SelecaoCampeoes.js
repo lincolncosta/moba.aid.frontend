@@ -71,11 +71,11 @@ export const SelecaoCampeoes = memo(() => {
               Blue Side
             </Text>
           </Box>
-          <CardBlueSide id={0} ativo={round === 0} numero={1} invocador={blueSide[0]} onSelect={() => {}} />
-          <CardBlueSide id={1} ativo={round === 3} numero={2} invocador={blueSide[1]} onSelect={() => {}} />
-          <CardBlueSide id={2} ativo={round === 4} numero={3} invocador={blueSide[2]} onSelect={() => {}} />
-          <CardBlueSide id={3} ativo={round === 7} numero={4} invocador={blueSide[3]} onSelect={() => {}} />
-          <CardBlueSide id={4} ativo={round === 8} numero={5} invocador={blueSide[4]} onSelect={() => {}} />
+          <CardBlueSide id={0} ativo={round === 0} numero={1} invocador={blueSide[0]} />
+          <CardBlueSide id={1} ativo={round === 3} numero={2} invocador={blueSide[1]} />
+          <CardBlueSide id={2} ativo={round === 4} numero={3} invocador={blueSide[2]} />
+          <CardBlueSide id={3} ativo={round === 7} numero={4} invocador={blueSide[3]} />
+          <CardBlueSide id={4} ativo={round === 8} numero={5} invocador={blueSide[4]} />
         </Box>
       </Box>
 
@@ -116,11 +116,11 @@ export const SelecaoCampeoes = memo(() => {
               Red Side
             </Text>
           </Box>
-          <CardRedSide id={5} ativo={round === 1} numero={1} invocador={redSide[0]} onSelect={() => {}} />
-          <CardRedSide id={6} ativo={round === 2} numero={2} invocador={redSide[1]} onSelect={() => {}} />
-          <CardRedSide id={7} ativo={round === 5} numero={3} invocador={redSide[2]} onSelect={() => {}} />
-          <CardRedSide id={8} ativo={round === 6} numero={4} invocador={redSide[3]} onSelect={() => {}} />
-          <CardRedSide id={9} ativo={round === 9} numero={5} invocador={redSide[4]} onSelect={() => {}} />
+          <CardRedSide id={5} ativo={round === 1} numero={1} invocador={redSide[0]} />
+          <CardRedSide id={6} ativo={round === 2} numero={2} invocador={redSide[1]} />
+          <CardRedSide id={7} ativo={round === 5} numero={3} invocador={redSide[2]} />
+          <CardRedSide id={8} ativo={round === 6} numero={4} invocador={redSide[3]} />
+          <CardRedSide id={9} ativo={round === 9} numero={5} invocador={redSide[4]} />
         </Box>
       </Box>
     </Box>
