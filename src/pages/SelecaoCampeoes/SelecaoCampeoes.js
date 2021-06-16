@@ -69,6 +69,8 @@ export const SelecaoCampeoes = memo(() => {
 
       if (proximoTime === meuTime) {
         buscaCampeoesSugeridos()
+      } else {
+        setCampeoesSugeridos([])
       }
     }
   }
