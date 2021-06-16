@@ -49,7 +49,7 @@ export const SelecaoRotas = ({ selecaoRotasAtiva, rotaSelecionada, onSelect, ...
     { label: 'Caçador', key: 'jungle', img: cacador },
     { label: 'Meio', key: 'mid', img: meio },
     { label: 'Atirador', key: 'adc', img: atirador },
-    { label: 'Suporte', key: 'supp', img: suporte }
+    { label: 'Suporte', key: 'support', img: suporte }
   ]
 
   return (

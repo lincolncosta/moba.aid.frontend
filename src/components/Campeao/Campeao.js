@@ -50,7 +50,7 @@ export const Campeao = ({ nome, alias, fontSizeNome, selecionado, rota, ...props
     jungle: cacador,
     mid: meio,
     adc: atirador,
-    supp: suporte
+    support: suporte
   }
 
   const img = `http://ddragon.leagueoflegends.com/cdn/11.10.1/img/champion/${alias}.png`
