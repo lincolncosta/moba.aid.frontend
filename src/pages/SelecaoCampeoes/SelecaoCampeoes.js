@@ -1,14 +1,13 @@
-import React, { Suspense, memo, useState } from 'react'
+import React, { memo, useState } from 'react'
 
-// import { useQuery } from 'react-query'
+import { getSugestao } from 'api/sugestao'
 
-import { Campeao } from 'components/Campeao'
 import { CardBlueSide } from 'components/CardBlueSide'
 import { CardRedSide } from 'components/CardRedSide'
 import { Box } from 'components/Box'
 import { Text } from 'components/Text'
-import { Loading } from 'components/Loading'
 import { PicksBans } from 'components/PicksBans'
+import { Sugestao } from 'components/Sugestao'
 
 const blue = [
   { round: 0, rota: null, campeao: null },
@@ -27,6 +26,8 @@ const red = [
 ]
 
 export const SelecaoCampeoes = memo(() => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [campeoesSugeridos, setCampeoesSugeridos] = useState([])
   const [round, setRound] = useState(0)
   const [blueSide, setBlueSide] = useState(blue)
   const [redSide, setRedSide] = useState(red)
@@ -35,12 +36,40 @@ export const SelecaoCampeoes = memo(() => {
   // TODO: Alterar por opção selecionada na tela anterior
   const meuTime = 'RED'
 
+  const params = {
+    NEEDED_RETURN_SIZE: 1,
+    ENEMY_HEROES: [],
+    BANNED_HEROES: [],
+    PICKED_HEROES: {}
+  }
+
+  const buscaCampeoesSugeridos = () => {
+    setIsLoading(true)
+
+    // TODO: Tornar dinâmico após a seleção de times
+    params.ENEMY_HEROES = blueSide.filter((c) => c.campeao).map((c) => c.campeao.id)
+
+    redSide.filter((c) => c.campeao).map((c) => (params.PICKED_HEROES[c.rota.key] = c.campeao.id))
+
+    return getSugestao(params)
+      .then((data) => {
+        const campeoes = Object.keys(data).map((rota) => (data[rota] ? { rota, campeao: data[rota] } : null))
+
+        setCampeoesSugeridos(campeoes.filter((c) => c))
+      })
+      .finally(() => setIsLoading(false))
+  }
+
   const confirmaSelecaoCampeao = () => {
     if (round < 10) {
       const proximoTime = [0, 3, 4, 7, 8].includes(round + 1) ? 'BLUE' : 'RED'
 
       setTimeSelecionando(proximoTime)
       setRound(round + 1)
+
+      if (proximoTime === meuTime) {
+        buscaCampeoesSugeridos()
+      }
     }
   }
 
@@ -87,26 +116,7 @@ export const SelecaoCampeoes = memo(() => {
           onConfirm={confirmaSelecaoCampeao}
         />
 
-        <Suspense
-          fallback={
-            <Box alignItems="center" justifyContent="center" display="flex" flex={1}>
-              <Loading height={60} width={60} />
-            </Box>
-          }
-        >
-          <Box
-            pt={5}
-            display="flex"
-            alignItems="center"
-            flexDirection="column"
-            style={{ borderTop: '1px solid yellow' }}
-          >
-            <Text mb={5} fontWeight={3} fontSize={18} color="textColor">
-              Sugestão
-            </Text>
-            <Campeao nome="Yorick" alias="Yorick" fontSizeNome={20} />
-          </Box>
-        </Suspense>
+        <Sugestao isLoading={isLoading} campeoesSugeridos={campeoesSugeridos} />
       </Box>
 
       <Box display="flex" flex={1} justifyContent="flex-end">
