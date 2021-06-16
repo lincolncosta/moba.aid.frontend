@@ -45,11 +45,11 @@ const RotaImage = styled(Box)`
 
 export const SelecaoRotas = ({ selecaoRotasAtiva, rotaSelecionada, onSelect, ...props }) => {
   const rotas = [
-    { label: 'Topo', img: topo },
-    { label: 'Caçador', img: cacador },
-    { label: 'Meio', img: meio },
-    { label: 'Atirador', img: atirador },
-    { label: 'Suporte', img: suporte }
+    { label: 'Topo', key: 'top', img: topo },
+    { label: 'Caçador', key: 'jungle', img: cacador },
+    { label: 'Meio', key: 'mid', img: meio },
+    { label: 'Atirador', key: 'adc', img: atirador },
+    { label: 'Suporte', key: 'supp', img: suporte }
   ]
 
   return (
@@ -61,7 +61,7 @@ export const SelecaoRotas = ({ selecaoRotasAtiva, rotaSelecionada, onSelect, ...
           </Text>
           <Box display="flex" flex={1} justifyContent="space-around">
             {rotas.map((rota) => (
-              <RotaStyled selecionado={rota.label === rotaSelecionada} onClick={() => onSelect(rota.label)}>
+              <RotaStyled selecionado={rota.label === rotaSelecionada} onClick={() => onSelect(rota)}>
                 <RotaImage img={rota.img} mb={3} />
                 <Text textAlign="center" fontWeight={2} fontSize={12} color="textColor">
                   {rota.label}

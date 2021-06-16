@@ -4,6 +4,12 @@ import styled, { css } from 'styled-components'
 import { Box } from '../Box'
 import { Text } from '../Text'
 
+import topo from 'assets/rotas/topo.png'
+import cacador from 'assets/rotas/cacador.png'
+import meio from 'assets/rotas/meio.png'
+import atirador from 'assets/rotas/atirador.png'
+import suporte from 'assets/rotas/suporte.png'
+
 const CampeaoStyled = styled(Box)`
   display: flex;
   flex-direction: column;
@@ -28,15 +34,36 @@ const CampeaoImage = styled(Box)`
     `}
 `
 
-export const Campeao = ({ nome, alias, fontSizeNome, selecionado, ...props }) => {
+const RotaImage = styled(Box)`
+  background-image: url(${(props) => props.img});
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+  height: 20px;
+  width: 20px;
+`
+
+export const Campeao = ({ nome, alias, fontSizeNome, selecionado, rota, ...props }) => {
+  const rotas = {
+    top: topo,
+    jungle: cacador,
+    mid: meio,
+    adc: atirador,
+    supp: suporte
+  }
+
   const img = `http://ddragon.leagueoflegends.com/cdn/11.10.1/img/champion/${alias}.png`
 
   return (
     <CampeaoStyled {...props}>
       <CampeaoImage selecionado={selecionado} style={{ backgroundImage: `url(${img})` }} mb={3} />
-      <Text textAlign="center" fontSize={fontSizeNome || 12} color="textColor">
-        {nome}
-      </Text>
+      <Box display="flex" alignItems="center">
+        {rota && <RotaImage img={rotas[rota]} mr={3} />}
+        <Text textAlign="center" fontSize={fontSizeNome || 12} color="textColor">
+          {nome}
+        </Text>
+      </Box>
     </CampeaoStyled>
   )
 }

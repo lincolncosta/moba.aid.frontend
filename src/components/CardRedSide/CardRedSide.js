@@ -46,7 +46,7 @@ export const CardRedSide = ({ numero, invocador, ativo, ...props }) => {
         </Text>
         {!!invocador.rota && (
           <Text mt={3} color="white" fontSize={15}>
-            {invocador.rota}
+            {invocador.rota.label}
           </Text>
         )}
       </Box>
