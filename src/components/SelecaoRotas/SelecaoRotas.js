@@ -61,7 +61,7 @@ export const SelecaoRotas = ({ selecaoRotasAtiva, rotaSelecionada, onSelect, ...
           </Text>
           <Box display="flex" flex={1} justifyContent="space-around">
             {rotas.map((rota) => (
-              <RotaStyled selecionado={rota.label === rotaSelecionada} onClick={() => onSelect(rota)}>
+              <RotaStyled selecionado={rota.key === rotaSelecionada?.key} onClick={() => onSelect(rota)}>
                 <RotaImage img={rota.img} mb={3} />
                 <Text textAlign="center" fontWeight={2} fontSize={12} color="textColor">
                   {rota.label}
