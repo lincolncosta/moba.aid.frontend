@@ -53,6 +53,10 @@ export const ButtonStyled = styled.button`
   ${(props) =>
     props.disabled &&
     css`
+      & {
+        cursor: auto;
+      }
+
       &:active:after {
         transform: scale(0, 0);
         opacity: 0.4;
