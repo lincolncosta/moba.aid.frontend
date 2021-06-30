@@ -7,7 +7,16 @@ import { SelecaoRotas } from '../SelecaoRotas'
 
 import campeoes from '../../database/champions.json'
 
-export const PicksBans = ({ selecaoRotasAtiva, onSelectCampeao, onSelectRota, onConfirm }) => {
+export const PicksBans = ({
+  bloqueados = [],
+  selecaoAtiva,
+  selecaoRotas,
+  selecaoRotasAtiva,
+  onSelectCampeao,
+  onSelectRota,
+  onConfirm,
+  ...props
+}) => {
   const [campeaoSelecionado, setCampeaoSelecionado] = useState(null)
   const [rotaSelecionada, setRotaSelecionada] = useState(null)
 
@@ -19,6 +28,10 @@ export const PicksBans = ({ selecaoRotasAtiva, onSelectCampeao, onSelectRota, on
   }
 
   const handleSelectCampeao = (campeao) => {
+    if (bloqueados.find((c) => c.id === campeao.id)) {
+      return
+    }
+
     onSelectCampeao(campeao, rotaSelecionada)
     setCampeaoSelecionado(campeao)
   }
@@ -30,12 +43,14 @@ export const PicksBans = ({ selecaoRotasAtiva, onSelectCampeao, onSelectRota, on
   }
 
   return (
-    <Box>
-      <SelecaoRotas
-        selecaoRotasAtiva={selecaoRotasAtiva}
-        rotaSelecionada={rotaSelecionada}
-        onSelect={(rota) => handleSelectRota(rota)}
-      />
+    <Box {...props}>
+      {selecaoRotas && (
+        <SelecaoRotas
+          selecaoRotasAtiva={selecaoRotasAtiva}
+          rotaSelecionada={rotaSelecionada}
+          onSelect={(rota) => handleSelectRota(rota)}
+        />
+      )}
 
       <Box
         display="flex"
@@ -53,6 +68,7 @@ export const PicksBans = ({ selecaoRotasAtiva, onSelectCampeao, onSelectRota, on
               key={campeao.id}
               nome={campeao.name}
               alias={campeao.alias}
+              bloqueado={bloqueados.find((c) => c.id === campeao.id)}
               selecionado={campeao.id === campeaoSelecionado?.id}
               onClick={() => handleSelectCampeao(campeao)}
             />
@@ -60,13 +76,15 @@ export const PicksBans = ({ selecaoRotasAtiva, onSelectCampeao, onSelectRota, on
         })}
       </Box>
       <Box height={60} display="flex" justifyContent="center" alignItems="center">
-        <Button
-          height={35}
-          disabled={selecaoRotasAtiva ? !campeaoSelecionado || !rotaSelecionada : !campeaoSelecionado}
-          onClick={handleConfirmarCampeao}
-        >
-          Confirmar
-        </Button>
+        {selecaoAtiva && (
+          <Button
+            height={35}
+            disabled={selecaoRotasAtiva ? !campeaoSelecionado || !rotaSelecionada : !campeaoSelecionado}
+            onClick={handleConfirmarCampeao}
+          >
+            Confirmar
+          </Button>
+        )}
       </Box>
     </Box>
   )

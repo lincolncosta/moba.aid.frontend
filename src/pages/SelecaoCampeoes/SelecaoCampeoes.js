@@ -32,6 +32,7 @@ export const SelecaoCampeoes = memo(() => {
   const [blueSide, setBlueSide] = useState(blue)
   const [redSide, setRedSide] = useState(red)
   const [timeSelecionando, setTimeSelecionando] = useState('BLUE')
+  const [bloqueados, setBloqueados] = useState([]) // TODO: Iniciar com os campeões banidos
 
   // TODO: Alterar por opção selecionada na tela anterior
   const meuTime = 'RED'
@@ -67,6 +68,8 @@ export const SelecaoCampeoes = memo(() => {
       setTimeSelecionando(proximoTime)
       setRound(round + 1)
 
+      atualizaCampeoesBloqueados()
+
       if (proximoTime === meuTime) {
         buscaCampeoesSugeridos()
       } else {
@@ -93,6 +96,13 @@ export const SelecaoCampeoes = memo(() => {
     timeSelecionando === 'BLUE' ? setBlueSide([...time]) : setRedSide([...time])
   }
 
+  const atualizaCampeoesBloqueados = () => {
+    const campeoesRedSide = redSide.map((c) => c.campeao).filter((c) => c)
+    const campeoesBlueSide = blueSide.map((c) => c.campeao).filter((c) => c)
+
+    setBloqueados([...campeoesBlueSide, ...campeoesRedSide])
+  }
+
   return (
     <Box display="flex" flex={1} p={15}>
       <Box display="flex" flex={1} justifyContent="flex-start">
@@ -112,6 +122,9 @@ export const SelecaoCampeoes = memo(() => {
 
       <Box display="flex" flex={2} px={15} flexDirection="column">
         <PicksBans
+          selecaoRotas
+          bloqueados={bloqueados}
+          selecaoAtiva={round < 10}
           selecaoRotasAtiva={meuTime === timeSelecionando}
           onSelectCampeao={selecionaCampeao}
           onSelectRota={selecionaRota}
