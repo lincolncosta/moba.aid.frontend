@@ -83,7 +83,7 @@ export const Banimentos = memo(() => {
       </Box>
 
       <Box mt={10} display="flex" justifyContent="center">
-        <Button disabled={!bans[9].campeao} onClick={() => terminarBans}>
+        <Button disabled={!bans[9].campeao} onClick={() => terminarBans()}>
           Terminar banimentos
         </Button>
       </Box>
