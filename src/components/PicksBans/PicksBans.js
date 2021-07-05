@@ -57,7 +57,7 @@ export const PicksBans = ({
         flexWrap="wrap"
         flex={1}
         justifyContent="center"
-        style={{ height: 375, maxHeight: 375, overflowY: 'scroll' }}
+        style={{ height: 465, maxHeight: 465, overflowY: 'scroll', backgroundColor: 'rgba(0, 0, 0, 0.7)' }}
       >
         {campeoesOrdenados.map((campeao) => {
           if (campeao.id === -1) return null
