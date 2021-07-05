@@ -53,6 +53,7 @@ export const SelecaoCampeoes = memo(() => {
     // TODO: Tornar dinâmico após a seleção de times
     params.NEEDED_RETURN_SIZE = NEEDED_RETURN_SIZE
     params.ENEMY_HEROES = blueSide.filter((c) => c.campeao).map((c) => c.campeao.id)
+    params.BANNED_HEROES = bloqueados.filter((c) => c.campeao).map((c) => c.campeao.id)
 
     redSide.filter((c) => c.campeao).map((c) => (params.PICKED_HEROES[c.rota.key] = c.campeao.id))
 
@@ -73,13 +74,15 @@ export const SelecaoCampeoes = memo(() => {
 
       atualizaCampeoesBloqueados()
 
-      if (proximoTime === meuTime) {
+      if (proximoTime === meuTime && timeSelecionando !== meuTime) {
         if (round + 1 === 0 || round + 1 === 9) {
           buscaCampeoesSugeridos(1)
         } else {
           buscaCampeoesSugeridos(2)
         }
-      } else {
+      }
+
+      if (proximoTime !== meuTime) {
         setCampeoesSugeridos([])
       }
     }
