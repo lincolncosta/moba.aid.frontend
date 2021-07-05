@@ -72,7 +72,7 @@ export const SelecaoCampeoes = memo(() => {
       atualizaCampeoesBloqueados()
 
       if (proximoTime === meuTime) {
-        if (round == 0 || round == 9) {
+        if (round === 0 || round === 9) {
           buscaCampeoesSugeridos(1)
         } else {
           buscaCampeoesSugeridos(2)
