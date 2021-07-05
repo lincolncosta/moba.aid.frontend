@@ -1,4 +1,5 @@
 import React, { memo, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 
 import { getSugestao } from 'api/sugestao'
 
@@ -26,16 +27,18 @@ const red = [
 ]
 
 export const SelecaoCampeoes = memo(() => {
+  const history = useHistory()
+
   const [isLoading, setIsLoading] = useState(false)
   const [campeoesSugeridos, setCampeoesSugeridos] = useState([])
   const [round, setRound] = useState(0)
   const [blueSide, setBlueSide] = useState(blue)
   const [redSide, setRedSide] = useState(red)
   const [timeSelecionando, setTimeSelecionando] = useState('BLUE')
-  const [bloqueados, setBloqueados] = useState([]) // TODO: Iniciar com os campeões banidos
+  console.log(history.location.state)
+  const [bloqueados, setBloqueados] = useState(history.location.state.bloqueados)
 
-  // TODO: Alterar por opção selecionada na tela anterior
-  const meuTime = 'RED'
+  const meuTime = history.location.state.meuTime
 
   const params = {
     NEEDED_RETURN_SIZE: 1,
@@ -56,7 +59,6 @@ export const SelecaoCampeoes = memo(() => {
     return getSugestao(params)
       .then((data) => {
         const campeoes = Object.keys(data).map((rota) => (data[rota] ? { rota, campeao: data[rota] } : null))
-
         setCampeoesSugeridos(campeoes.filter((c) => c))
       })
       .finally(() => setIsLoading(false))
@@ -72,7 +74,7 @@ export const SelecaoCampeoes = memo(() => {
       atualizaCampeoesBloqueados()
 
       if (proximoTime === meuTime) {
-        if (round === 0 || round === 9) {
+        if (round + 1 === 0 || round + 1 === 9) {
           buscaCampeoesSugeridos(1)
         } else {
           buscaCampeoesSugeridos(2)
@@ -105,7 +107,7 @@ export const SelecaoCampeoes = memo(() => {
     const campeoesRedSide = redSide.map((c) => c.campeao).filter((c) => c)
     const campeoesBlueSide = blueSide.map((c) => c.campeao).filter((c) => c)
 
-    setBloqueados([...campeoesBlueSide, ...campeoesRedSide])
+    setBloqueados([...bloqueados, ...campeoesBlueSide, ...campeoesRedSide])
   }
 
   return (

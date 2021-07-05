@@ -45,7 +45,10 @@ export const Banimentos = memo(() => {
   }
 
   const terminarBans = () => {
-    history.push('/picks')
+    history.push({
+      pathname: '/picks',
+      state: {bloqueados: bloqueados, meuTime: 'RED'}
+    })
   }
 
   return (
