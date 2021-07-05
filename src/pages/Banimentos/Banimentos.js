@@ -47,7 +47,7 @@ export const Banimentos = memo(() => {
   const terminarBans = () => {
     history.push({
       pathname: '/picks',
-      state: {bloqueados: bloqueados, meuTime: 'RED'}
+      state: { bloqueados: bloqueados, meuTime: 'RED' }
     })
   }
 
@@ -55,7 +55,7 @@ export const Banimentos = memo(() => {
     <Box display="flex" flex={1} flexDirection="column" alignItems="center">
       <Box mb={10} display="flex" flex={1} alignItems="center">
         <Text fontWeight={3} fontSize={40} color="textColor">
-          Faça seus bans
+          Informe os banimentos de ambos os times
         </Text>
       </Box>
 
