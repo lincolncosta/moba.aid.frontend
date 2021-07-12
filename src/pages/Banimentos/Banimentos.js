@@ -27,6 +27,7 @@ export const Banimentos = memo(() => {
   const [round, setRound] = useState(0)
   const [bans, setBans] = useState(bansArray)
   const [bloqueados, setBloqueados] = useState([])
+  const [time, setTime] = useState([])
 
   const confirmaSelecaoCampeao = () => {
     if (round < 10) {
@@ -45,10 +46,15 @@ export const Banimentos = memo(() => {
   }
 
   const terminarBans = () => {
+    console.log(time)
     history.push({
       pathname: '/picks',
-      state: { bloqueados: bloqueados, meuTime: 'RED' }
+      state: { bloqueados: bloqueados, meuTime: time }
     })
+  }
+
+  const handleSelectTime = (e) => {
+    setTime(e.target.value)
   }
 
   return (
@@ -84,6 +90,27 @@ export const Banimentos = memo(() => {
           <CampeaoBanido ativo={round === 9} color="red" campeao={bans[9]?.campeao} />
         </Box>
       </Box>
+
+      <Text fontWeight={3} fontSize={40} color="textColor">
+        Informe de qual lado você está jogando
+      </Text>
+
+      <div className="radio">
+        <label>
+          <input type="radio" value="BLUE" onChange={handleSelectTime} />
+          <Text fontWeight={2} fontSize={15} color="textColor">
+            Time azul
+          </Text>
+        </label>
+      </div>
+      <div className="radio">
+        <label>
+          <input type="radio" value="RED" onChange={handleSelectTime} />
+          <Text fontWeight={2} fontSize={15} color="textColor">
+            Time vermelho
+          </Text>
+        </label>
+      </div>
 
       <Box mt={10} display="flex" justifyContent="center">
         <Button disabled={!bans[9].campeao} onClick={() => terminarBans()}>
