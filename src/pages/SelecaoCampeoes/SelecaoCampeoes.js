@@ -35,9 +35,8 @@ export const SelecaoCampeoes = memo(() => {
   const [blueSide, setBlueSide] = useState(blue)
   const [redSide, setRedSide] = useState(red)
   const [timeSelecionando, setTimeSelecionando] = useState('BLUE')
-  console.log(history.location.state)
   const [bloqueados, setBloqueados] = useState(history.location.state.bloqueados)
-
+  const [isFirstPick, setIsFirstPick] = useState(true)
   const meuTime = history.location.state.meuTime
 
   const params = {
@@ -48,6 +47,11 @@ export const SelecaoCampeoes = memo(() => {
   }
 
   const buscaCampeoesSugeridos = (NEEDED_RETURN_SIZE) => {
+
+    if (!isFirstPick){
+      return
+    }
+
     setIsLoading(true)
 
     // TODO: Tornar dinâmico após a seleção de times
@@ -62,12 +66,18 @@ export const SelecaoCampeoes = memo(() => {
       blueSide.filter((c) => c.campeao).map((c) => (params.PICKED_HEROES[c.rota.key] = c.campeao.id))
     }
 
+    setIsFirstPick(false)
+
     return getSugestao(params)
       .then((data) => {
         const campeoes = Object.keys(data).map((rota) => (data[rota] ? { rota, campeao: data[rota] } : null))
         setCampeoesSugeridos(campeoes.filter((c) => c))
       })
       .finally(() => setIsLoading(false))
+  }
+
+  if (meuTime === 'BLUE') {
+    buscaCampeoesSugeridos(1)
   }
 
   const confirmaSelecaoCampeao = () => {
