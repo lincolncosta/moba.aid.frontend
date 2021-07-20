@@ -40,7 +40,6 @@ export const SelecaoCampeoes = memo(() => {
   const meuTime = history.location.state.meuTime
 
   const params = {
-    NEEDED_RETURN_SIZE: 1,
     ENEMY_HEROES: [],
     BANNED_HEROES: [],
     PICKED_HEROES: {}

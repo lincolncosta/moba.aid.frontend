@@ -82,7 +82,7 @@ export const PicksBans = ({
             disabled={selecaoRotasAtiva ? !campeaoSelecionado || !rotaSelecionada : !campeaoSelecionado}
             onClick={handleConfirmarCampeao}
           >
-            Confirmar
+            Select champion
           </Button>
         )}
       </Box>

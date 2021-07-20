@@ -21,7 +21,7 @@ export const Home = memo(() => {
             team compositions
           </Text>
           <Box display="flex" justifyContent="center">
-            <Button onClick={() => history.push('/bans')}>Começar</Button>
+            <Button onClick={() => history.push('/bans')}>Start</Button>
           </Box>
         </Box>
       </Box>
