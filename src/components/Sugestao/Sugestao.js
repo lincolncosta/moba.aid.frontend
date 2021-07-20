@@ -11,7 +11,7 @@ export const Sugestao = ({ isLoading, campeoesSugeridos = [] }) => {
   return (
     <Box pt={5} display="flex" alignItems="center" flexDirection="column" style={{ borderTop: '1px solid yellow' }}>
       <Text mb={5} fontWeight={3} fontSize={18} color="textColor">
-        Sugestão
+        Suggestions
       </Text>
       {isLoading ? (
         <Box alignItems="center" justifyContent="center" display="flex" flex={1} p={15}>

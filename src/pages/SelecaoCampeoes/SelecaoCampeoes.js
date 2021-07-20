@@ -36,7 +36,6 @@ export const SelecaoCampeoes = memo(() => {
   const [redSide, setRedSide] = useState(red)
   const [timeSelecionando, setTimeSelecionando] = useState('BLUE')
   const [bloqueados, setBloqueados] = useState(history.location.state.bloqueados)
-  const [isFirstPick, setIsFirstPick] = useState(true)
   const meuTime = history.location.state.meuTime
 
   const params = {
@@ -60,8 +59,6 @@ export const SelecaoCampeoes = memo(() => {
       blueSide.filter((c) => c.campeao).map((c) => (params.PICKED_HEROES[c.rota.key] = c.campeao.id))
     }
 
-    setIsFirstPick(false)
-
     return getSugestao(params)
       .then((data) => {
         const campeoes = Object.keys(data).map((rota) => (data[rota] ? { rota, campeao: data[rota] } : null))
@@ -71,6 +68,7 @@ export const SelecaoCampeoes = memo(() => {
   }
 
   const confirmaSelecaoCampeao = () => {
+    console.log(round)
     if (round < 10) {
       const proximoTime = [0, 3, 4, 7, 8].includes(round + 1) ? 'BLUE' : 'RED'
 
@@ -80,7 +78,7 @@ export const SelecaoCampeoes = memo(() => {
       atualizaCampeoesBloqueados()
 
       if (proximoTime === meuTime && timeSelecionando !== meuTime) {
-        if (round + 1 === 0 || round + 1 === 9 || isFirstPick) {
+        if (round + 1 === 0 || round + 1 === 9) {
           buscaCampeoesSugeridos(1)
         } else {
           buscaCampeoesSugeridos(2)
