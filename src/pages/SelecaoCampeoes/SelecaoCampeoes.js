@@ -47,11 +47,6 @@ export const SelecaoCampeoes = memo(() => {
   }
 
   const buscaCampeoesSugeridos = (NEEDED_RETURN_SIZE) => {
-
-    if (!isFirstPick){
-      return
-    }
-
     setIsLoading(true)
 
     // TODO: Tornar dinâmico após a seleção de times
@@ -76,10 +71,6 @@ export const SelecaoCampeoes = memo(() => {
       .finally(() => setIsLoading(false))
   }
 
-  if (meuTime === 'BLUE') {
-    buscaCampeoesSugeridos(1)
-  }
-
   const confirmaSelecaoCampeao = () => {
     if (round < 10) {
       const proximoTime = [0, 3, 4, 7, 8].includes(round + 1) ? 'BLUE' : 'RED'
@@ -90,7 +81,7 @@ export const SelecaoCampeoes = memo(() => {
       atualizaCampeoesBloqueados()
 
       if (proximoTime === meuTime && timeSelecionando !== meuTime) {
-        if (round + 1 === 0 || round + 1 === 9) {
+        if (round + 1 === 0 || round + 1 === 9 || isFirstPick) {
           buscaCampeoesSugeridos(1)
         } else {
           buscaCampeoesSugeridos(2)

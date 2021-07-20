@@ -96,7 +96,7 @@ export const Banimentos = memo(() => {
 
       <div className="radio">
         <label>
-          <input type="radio" value="BLUE" onChange={handleSelectTime} />
+          <input type="radio" name="meuTime" value="BLUE" onChange={handleSelectTime} />
           <Text fontWeight={2} fontSize={15} color="textColor">
             Time azul
           </Text>
@@ -104,7 +104,7 @@ export const Banimentos = memo(() => {
       </div>
       <div className="radio">
         <label>
-          <input type="radio" value="RED" onChange={handleSelectTime} />
+          <input type="radio" name="meuTime" value="RED" onChange={handleSelectTime} />
           <Text fontWeight={2} fontSize={15} color="textColor">
             Time vermelho
           </Text>
