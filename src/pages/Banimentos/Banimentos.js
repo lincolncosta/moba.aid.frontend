@@ -29,8 +29,6 @@ export const Banimentos = memo(() => {
   const [bloqueados, setBloqueados] = useState([])
   const [time, setTime] = useState([])
 
-  console.log(!time.length)
-
   const confirmaSelecaoCampeao = () => {
     if (round < 10) {
       setRound(round + 1)
