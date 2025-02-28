@@ -45,11 +45,11 @@ const RotaImage = styled(Box)`
 
 export const SelecaoRotas = ({ selecaoRotasAtiva, rotaSelecionada, onSelect, ...props }) => {
   const rotas = [
-    { label: 'Topo', key: 'top', img: topo },
-    { label: 'Caçador', key: 'jungle', img: cacador },
-    { label: 'Meio', key: 'mid', img: meio },
-    { label: 'Atirador', key: 'adc', img: atirador },
-    { label: 'Suporte', key: 'support', img: suporte }
+    { label: 'Top', key: 'top', img: topo },
+    { label: 'Jungler', key: 'jungle', img: cacador },
+    { label: 'Mid', key: 'mid', img: meio },
+    { label: 'Ad Carry', key: 'adc', img: atirador },
+    { label: 'Support', key: 'support', img: suporte }
   ]
 
   return (
@@ -57,11 +57,11 @@ export const SelecaoRotas = ({ selecaoRotasAtiva, rotaSelecionada, onSelect, ...
       {selecaoRotasAtiva && (
         <>
           <Text mb={10} fontWeight={3} fontSize={15} color="textColor" textAlign="center">
-            Selecione a rota correspondente
+            Select your champion and role
           </Text>
           <Box display="flex" flex={1} justifyContent="space-around">
             {rotas.map((rota) => (
-              <RotaStyled selecionado={rota.key === rotaSelecionada?.key} onClick={() => onSelect(rota)}>
+              <RotaStyled key={rota.key} selecionado={rota.key === rotaSelecionada?.key} onClick={() => onSelect(rota)}>
                 <RotaImage img={rota.img} mb={3} />
                 <Text textAlign="center" fontWeight={2} fontSize={12} color="textColor">
                   {rota.label}

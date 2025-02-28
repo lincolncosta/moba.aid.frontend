@@ -42,7 +42,7 @@ const BanImage = styled(Box)`
 `
 
 export const CampeaoBanido = ({ campeao, ativo, color, ...props }) => {
-  const img = `http://ddragon.leagueoflegends.com/cdn/11.10.1/img/champion/${campeao?.alias}.png`
+  const img = `http://ddragon.leagueoflegends.com/cdn/${process.env.REACT_APP_LAST_PATCH}/img/champion/${campeao?.alias}.png`
 
   return (
     <CampeaoStyled {...props}>

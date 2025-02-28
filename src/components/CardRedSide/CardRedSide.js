@@ -31,7 +31,7 @@ const Card = styled(Box)`
 `
 
 export const CardRedSide = ({ numero, invocador, ativo, ...props }) => {
-  const campeaoImg = `http://ddragon.leagueoflegends.com/cdn/11.10.1/img/champion/${invocador.campeao?.alias}.png`
+  const campeaoImg = `http://ddragon.leagueoflegends.com/cdn/${process.env.REACT_APP_LAST_PATCH}/img/champion/${invocador.campeao?.alias}.png`
 
   return (
     <Card py={10} pl={10} ativo={ativo} {...props}>
@@ -42,7 +42,7 @@ export const CardRedSide = ({ numero, invocador, ativo, ...props }) => {
           </Text>
         )}
         <Text fontWeight={2} color="white" fontSize={22}>
-          {invocador.campeao && !ativo ? invocador.campeao.name : `Invocador ${numero}`}
+          {invocador.campeao && !ativo ? invocador.campeao.name : `Summoner ${numero}`}
         </Text>
         {!!invocador.rota && (
           <Text mt={3} color="white" fontSize={15}>

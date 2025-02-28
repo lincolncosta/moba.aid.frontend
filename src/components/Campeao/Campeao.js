@@ -72,7 +72,7 @@ export const Campeao = ({ nome, alias, fontSizeNome, selecionado, rota, bloquead
     support: suporte
   }
 
-  const img = `http://ddragon.leagueoflegends.com/cdn/11.10.1/img/champion/${alias}.png`
+  const img = `http://ddragon.leagueoflegends.com/cdn/${process.env.REACT_APP_LAST_PATCH}/img/champion/${alias}.png`
 
   return (
     <CampeaoStyled {...props}>

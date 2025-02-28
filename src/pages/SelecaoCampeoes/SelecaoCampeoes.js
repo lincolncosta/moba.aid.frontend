@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react'
+import React, { memo, useCallback, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import { getSugestao } from 'api/sugestao'
@@ -8,7 +8,7 @@ import { CardRedSide } from 'components/CardRedSide'
 import { Box } from 'components/Box'
 import { Text } from 'components/Text'
 import { PicksBans } from 'components/PicksBans'
-import { Sugestao } from 'components/Sugestao'
+import campeoesDataset from '../../database/champions.json'
 
 const blue = [
   { round: 0, rota: null, campeao: null },
@@ -29,76 +29,108 @@ const red = [
 export const SelecaoCampeoes = memo(() => {
   const history = useHistory()
 
-  const [isLoading, setIsLoading] = useState(false)
-  const [campeoesSugeridos, setCampeoesSugeridos] = useState([])
+  // const [isLoading, setIsLoading] = useState(false)
   const [round, setRound] = useState(0)
   const [blueSide, setBlueSide] = useState(blue)
   const [redSide, setRedSide] = useState(red)
   const [timeSelecionando, setTimeSelecionando] = useState('BLUE')
   const [bloqueados, setBloqueados] = useState(history.location.state.bloqueados)
+  const [solicitacaoPendente, setSolicitacaoPendente] = useState(false)
   const meuTime = history.location.state.meuTime
+  const [params, setParams] = useState({
+    enemyChampions: [],
+    bannedChampions: [],
+    selectedChampions: {},
+    selectedRoles: [],
+    patch: '14.18',
+  })
 
-  const params = {
-    ENEMY_HEROES: [],
-    BANNED_HEROES: [],
-    PICKED_HEROES: {}
-  }
+  const selecionaCampeao = useCallback((campeaoSelecionado) => {
+    setBlueSide((prevBlueSide) => {
+      if (timeSelecionando === 'BLUE') {
+        const newBlueSide = [...prevBlueSide]
+        const posicao = newBlueSide.findIndex((p) => p.round === round)
+        newBlueSide[posicao].campeao = campeaoSelecionado
+        return newBlueSide
+      }
+      return prevBlueSide
+    })
 
-  const buscaCampeoesSugeridos = (NEEDED_RETURN_SIZE) => {
-    setIsLoading(true)
+    setRedSide((prevRedSide) => {
+      if (timeSelecionando === 'RED') {
+        const newRedSide = [...prevRedSide]
+        const posicao = newRedSide.findIndex((p) => p.round === round)
+        newRedSide[posicao].campeao = campeaoSelecionado
+        return newRedSide
+      }
+      return prevRedSide
+    })
+  }, [timeSelecionando, round])
 
-    // TODO: Tornar dinâmico após a seleção de times
-    params.NEEDED_RETURN_SIZE = NEEDED_RETURN_SIZE
-    params.BANNED_HEROES = bloqueados.filter((c) => c.campeao).map((c) => c.campeao.id)
+  const atualizaCampeoesBloqueados = useCallback(() => {
+    setBloqueados((prevBloqueados) => {
+      const campeoesRedSide = redSide.map((c) => c.campeao).filter(Boolean)
+      const campeoesBlueSide = blueSide.map((c) => c.campeao).filter(Boolean)
+      return [...prevBloqueados, ...campeoesBlueSide, ...campeoesRedSide]
+    })
+  }, [blueSide, redSide])
 
-    if (meuTime === 'RED') {
-      params.ENEMY_HEROES = blueSide.filter((c) => c.campeao).map((c) => c.campeao.id)
-      redSide.filter((c) => c.campeao).map((c) => (params.PICKED_HEROES[c.rota.key] = c.campeao.id))
-    } else {
-      params.ENEMY_HEROES = redSide.filter((c) => c.campeao).map((c) => c.campeao.id)
-      blueSide.filter((c) => c.campeao).map((c) => (params.PICKED_HEROES[c.rota.key] = c.campeao.id))
-    }
+  const atualizaTimeGA = useCallback((nomeCampeao, role) => {
+    setParams((prevParams) => ({
+      ...prevParams,
+      selectedChampions: {
+        ...prevParams.selectedChampions,
+        [role]: nomeCampeao
+      },
+      selectedRoles: prevParams.selectedRoles.includes(role)
+        ? prevParams.selectedRoles
+        : [...prevParams.selectedRoles, role]
+    }))
+  }, [])
 
-    return getSugestao(params)
-      .then((data) => {
-        const campeoes = Object.keys(data).map((rota) => (data[rota] ? { rota, campeao: data[rota] } : null))
-        setCampeoesSugeridos(campeoes.filter((c) => c))
-      })
-      .finally(() => setIsLoading(false))
-  }
 
-  const confirmaSelecaoCampeao = () => {
-    console.log(round)
+
+  const confirmaSelecaoCampeao = useCallback(() => {
     if (round < 10) {
       const proximoTime = [0, 3, 4, 7, 8].includes(round + 1) ? 'BLUE' : 'RED'
 
       setTimeSelecionando(proximoTime)
-      setRound(round + 1)
-
+      setRound((prevRound) => prevRound + 1) // Atualiza corretamente o estado
       atualizaCampeoesBloqueados()
-
-      if (proximoTime === meuTime && timeSelecionando !== meuTime) {
-        if (round + 1 === 0 || round + 1 === 9) {
-          buscaCampeoesSugeridos(1)
-        } else {
-          buscaCampeoesSugeridos(2)
-        }
-      }
-
-      if (proximoTime !== meuTime) {
-        setCampeoesSugeridos([])
-      }
+      setSolicitacaoPendente(false)
     }
-  }
+  }, [round, atualizaCampeoesBloqueados])
 
-  const selecionaCampeao = (campeaoSelecionado) => {
-    const time = timeSelecionando === 'BLUE' ? blueSide : redSide
-    const posicao = time.findIndex((p) => p.round === round)
+  const buscaCampeoesSugeridos = useCallback(async (numChampions) => {
+    if (solicitacaoPendente) return // Evita chamadas duplas
 
-    time[posicao].campeao = campeaoSelecionado
+    setSolicitacaoPendente(true) // Marca como "requisição em andamento"
 
-    timeSelecionando === 'BLUE' ? setBlueSide([...time]) : setRedSide([...time])
-  }
+    const updatedParams = { ...params } // Fazendo uma cópia para evitar mutações indesejadas
+    updatedParams.numChampions = numChampions
+    updatedParams.bannedChampions = bloqueados.filter((c) => c.campeao).map((c) => c.campeao.name)
+    setParams(updatedParams)
+
+    if (meuTime === 'RED') {
+      updatedParams.enemyChampions = redSide.filter((c) => c.campeao).map((c) => c.campeao.name)
+    } else {
+      updatedParams.enemyChampions = blueSide.filter((c) => c.campeao).map((c) => c.campeao.name)
+    }
+
+    const campeaoSugerido = await getSugestao(updatedParams)
+    const campeao = campeoesDataset.find((c) => c.name === campeaoSugerido.name)
+    selecionaCampeao(campeao)
+    atualizaTimeGA(campeaoSugerido.name, campeaoSugerido.role)
+    confirmaSelecaoCampeao()
+  }, [bloqueados, blueSide, redSide, meuTime, solicitacaoPendente, params, selecionaCampeao, confirmaSelecaoCampeao, atualizaTimeGA])
+
+  useEffect(() => {
+    const proximoTime = [0, 3, 4, 7, 8].includes(round) ? 'BLUE' : 'RED'
+
+    if (proximoTime !== meuTime && !solicitacaoPendente) {
+      buscaCampeoesSugeridos(1)
+    }
+  }, [round, buscaCampeoesSugeridos, meuTime, solicitacaoPendente])
 
   const selecionaRota = (rota) => {
     const time = timeSelecionando === 'BLUE' ? blueSide : redSide
@@ -107,13 +139,6 @@ export const SelecaoCampeoes = memo(() => {
     time[posicao].rota = rota
 
     timeSelecionando === 'BLUE' ? setBlueSide([...time]) : setRedSide([...time])
-  }
-
-  const atualizaCampeoesBloqueados = () => {
-    const campeoesRedSide = redSide.map((c) => c.campeao).filter((c) => c)
-    const campeoesBlueSide = blueSide.map((c) => c.campeao).filter((c) => c)
-
-    setBloqueados([...bloqueados, ...campeoesBlueSide, ...campeoesRedSide])
   }
 
   return (
@@ -143,8 +168,6 @@ export const SelecaoCampeoes = memo(() => {
           onSelectRota={selecionaRota}
           onConfirm={confirmaSelecaoCampeao}
         />
-
-        <Sugestao isLoading={isLoading} campeoesSugeridos={campeoesSugeridos} />
       </Box>
 
       <Box display="flex" flex={1} justifyContent="flex-end">
