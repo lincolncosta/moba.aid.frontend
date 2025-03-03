@@ -1144,7 +1144,7 @@
   },
   {
     "id": 432,
-    "name": "Bardo",
+    "name": "Bard",
     "alias": "Bard",
     "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/432.png",
     "roles": ["support", "mage"],

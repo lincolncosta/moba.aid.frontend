@@ -31,6 +31,7 @@ export const SelecaoCampeoes = memo(() => {
 
   // const [isLoading, setIsLoading] = useState(false)
   const [round, setRound] = useState(0)
+  const [terminouDraft, setTerminouDraft] = useState(false)
   const [blueSide, setBlueSide] = useState(blue)
   const [redSide, setRedSide] = useState(red)
   const [timeSelecionando, setTimeSelecionando] = useState('BLUE')
@@ -65,6 +66,11 @@ export const SelecaoCampeoes = memo(() => {
       }
       return prevRedSide
     })
+
+    if ([...red, ...blue].every(obj => obj.campeao !== null)) {
+      setTerminouDraft(true)
+    }
+
   }, [timeSelecionando, round])
 
   const atualizaCampeoesBloqueados = useCallback(() => {
@@ -87,8 +93,6 @@ export const SelecaoCampeoes = memo(() => {
         : [...prevParams.selectedRoles, role]
     }))
   }, [])
-
-
 
   const confirmaSelecaoCampeao = useCallback(() => {
     if (round < 10) {
@@ -127,19 +131,11 @@ export const SelecaoCampeoes = memo(() => {
   useEffect(() => {
     const proximoTime = [0, 3, 4, 7, 8].includes(round) ? 'BLUE' : 'RED'
 
-    if (proximoTime !== meuTime && !solicitacaoPendente) {
+    if (proximoTime !== meuTime && !solicitacaoPendente && !terminouDraft) {
       buscaCampeoesSugeridos(1)
     }
-  }, [round, buscaCampeoesSugeridos, meuTime, solicitacaoPendente])
+  }, [round, buscaCampeoesSugeridos, meuTime, solicitacaoPendente, terminouDraft])
 
-  const selecionaRota = (rota) => {
-    const time = timeSelecionando === 'BLUE' ? blueSide : redSide
-    const posicao = time.findIndex((p) => p.round === round)
-
-    time[posicao].rota = rota
-
-    timeSelecionando === 'BLUE' ? setBlueSide([...time]) : setRedSide([...time])
-  }
 
   return (
     <Box display="flex" flex={1} p={15}>
@@ -165,9 +161,19 @@ export const SelecaoCampeoes = memo(() => {
           selecaoAtiva={round < 10}
           selecaoRotasAtiva={meuTime === timeSelecionando}
           onSelectCampeao={selecionaCampeao}
-          onSelectRota={selecionaRota}
           onConfirm={confirmaSelecaoCampeao}
         />
+
+        {terminouDraft && (
+          <Box pt={5} display="flex" alignItems="center" flexDirection="column" style={{ borderTop: '1px solid yellow' }}>
+            <Text mb={5} fontWeight={3} fontSize={18} color="textColor">
+              Win probability
+            </Text>
+            <Box display="flex" justifyContent="space-around">
+              <Box>O time azul/vermelho tem 54% de probabilidade de vitória.</Box>
+            </Box>
+          </Box>
+        )}
       </Box>
 
       <Box display="flex" flex={1} justifyContent="flex-end">
@@ -184,6 +190,8 @@ export const SelecaoCampeoes = memo(() => {
           <CardRedSide id={9} ativo={round === 9} numero={5} invocador={redSide[4]} />
         </Box>
       </Box>
+
+
     </Box>
   )
 })

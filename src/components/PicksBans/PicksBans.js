@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import { Box } from '../Box'
 import { Button } from '../Button'
 import { Campeao } from '../Campeao'
-import { SelecaoRotas } from '../SelecaoRotas'
 
 import campeoes from '../../database/champions.json'
 
@@ -18,40 +17,25 @@ export const PicksBans = ({
   ...props
 }) => {
   const [campeaoSelecionado, setCampeaoSelecionado] = useState(null)
-  const [rotaSelecionada, setRotaSelecionada] = useState(null)
 
   const campeoesOrdenados = campeoes.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0))
-
-  const handleSelectRota = (rota) => {
-    onSelectRota(rota)
-    setRotaSelecionada(rota)
-  }
 
   const handleSelectCampeao = (campeao) => {
     if (bloqueados.find((c) => c.id === campeao.id)) {
       return
     }
 
-    onSelectCampeao(campeao, rotaSelecionada)
+    onSelectCampeao(campeao)
     setCampeaoSelecionado(campeao)
   }
 
   const handleConfirmarCampeao = () => {
     onConfirm(campeaoSelecionado)
     setCampeaoSelecionado(null)
-    setRotaSelecionada(null)
   }
 
   return (
     <Box {...props}>
-      {selecaoRotas && (
-        <SelecaoRotas
-          selecaoRotasAtiva={selecaoRotasAtiva}
-          rotaSelecionada={rotaSelecionada}
-          onSelect={(rota) => handleSelectRota(rota)}
-        />
-      )}
-
       <Box
         display="flex"
         flexWrap="wrap"
@@ -79,7 +63,7 @@ export const PicksBans = ({
         {selecaoAtiva && (
           <Button
             height={35}
-            disabled={selecaoRotasAtiva ? !campeaoSelecionado || !rotaSelecionada : !campeaoSelecionado}
+            disabled={selecaoRotasAtiva ? !campeaoSelecionado : !campeaoSelecionado}
             onClick={handleConfirmarCampeao}
           >
             Select champion
