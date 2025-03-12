@@ -90,7 +90,7 @@ export const Banimentos = memo(() => {
         </Box>
       </Box>
 
-      <Text fontWeight={3} fontSize={40} color="textColor">
+      <Text fontWeight={3} fontSize={40} color="textColor" mt={10} mb={10}>
         Which side are you playing?
       </Text>
 
@@ -111,7 +111,7 @@ export const Banimentos = memo(() => {
         </label>
       </div>
 
-      <Box mt={10} display="flex" justifyContent="center">
+      <Box mt={10} mb={10} display="flex" justifyContent="center">
         <Button disabled={!bloqueados.length !== 10 && !time.length} onClick={() => terminarBans()}>
           Next step
         </Button>
