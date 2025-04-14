@@ -43,7 +43,8 @@ export const SelecaoCampeoes = memo(() => {
     bannedChampions: [],
     selectedChampions: {},
     selectedRoles: [],
-    patch: '14.18',
+    patch: '15.07',
+    objective: 'PICK'
   })
 
   const selecionaCampeao = useCallback((campeaoSelecionado) => {
@@ -112,7 +113,7 @@ export const SelecaoCampeoes = memo(() => {
 
     const updatedParams = { ...params } // Fazendo uma cópia para evitar mutações indesejadas
     updatedParams.numChampions = numChampions
-    updatedParams.bannedChampions = bloqueados.filter((c) => c.campeao).map((c) => c.campeao.name)
+    updatedParams.bannedChampions = bloqueados.map((champion) => champion.name)
     setParams(updatedParams)
 
     if (meuTime === 'RED') {
@@ -122,9 +123,12 @@ export const SelecaoCampeoes = memo(() => {
     }
 
     const campeaoSugerido = await getSugestao(updatedParams)
-    const campeao = campeoesDataset.find((c) => c.name === campeaoSugerido.name)
+    console.log(campeaoSugerido.suggestions[0])
+    console.log(campeoesDataset)
+    const campeao = campeoesDataset.find((c) => c.name === campeaoSugerido.suggestions[0].champion)
+    console.log(campeao)
     selecionaCampeao(campeao)
-    atualizaTimeGA(campeaoSugerido.name, campeaoSugerido.role)
+    atualizaTimeGA(campeaoSugerido.suggestions[0].champion, campeaoSugerido.suggestions[0].role)
     confirmaSelecaoCampeao()
   }, [bloqueados, blueSide, redSide, meuTime, solicitacaoPendente, params, selecionaCampeao, confirmaSelecaoCampeao, atualizaTimeGA])
 
@@ -143,7 +147,7 @@ export const SelecaoCampeoes = memo(() => {
         <Box mt={18} flexDirection="column">
           <Box mb={5} display="flex">
             <Text mb={5} fontWeight={3} fontSize={18} color="textColor">
-              Blue Side
+              Blue Side {timeSelecionando === 'BLUE' ? `(Your team)` : ``}
             </Text>
           </Box>
           <CardBlueSide id={0} ativo={round === 0} numero={1} invocador={blueSide[0]} />
@@ -180,7 +184,7 @@ export const SelecaoCampeoes = memo(() => {
         <Box mt={18} flexDirection="column">
           <Box mb={5} display="flex" justifyContent="flex-end">
             <Text fontWeight={3} fontSize={18} color="textColor">
-              Red Side
+              Red Side  {timeSelecionando === 'BLUE' ? `(AI team)` : ``}
             </Text>
           </Box>
           <CardRedSide id={5} ativo={round === 1} numero={1} invocador={redSide[0]} />

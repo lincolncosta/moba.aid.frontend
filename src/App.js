@@ -11,6 +11,7 @@ import { SelecaoCampeoes } from 'pages/SelecaoCampeoes'
 import { Box } from 'components/Box'
 
 import bg from 'assets/background.jpg'
+import { Side } from 'pages/Side'
 
 const BackgroundImage = styled(Box)`
   background-image: url(${bg});
@@ -39,6 +40,9 @@ export default () => {
           <Switch>
             <Route path="/" exact>
               <Home />
+            </Route>
+            <Route path="/side">
+              <Side />
             </Route>
             <Route path="/bans">
               <Banimentos />

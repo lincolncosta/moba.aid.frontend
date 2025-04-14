@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { Box } from '../Box'
 import { Button } from '../Button'
@@ -14,9 +14,18 @@ export const PicksBans = ({
   onSelectCampeao,
   onSelectRota,
   onConfirm,
+  campeaoSelecionado: campeaoSelecionadoProp,
+  confirmarAutomaticamente,
   ...props
 }) => {
-  const [campeaoSelecionado, setCampeaoSelecionado] = useState(null)
+  const [campeaoSelecionadoLocal, setCampeaoSelecionadoLocal] = useState(null)
+  const campeaoSelecionado = campeaoSelecionadoProp || campeaoSelecionadoLocal
+
+  useEffect(() => {
+    if (confirmarAutomaticamente && campeaoSelecionadoProp && onConfirm) {
+      onConfirm(campeaoSelecionadoProp)
+    }
+  }, [campeaoSelecionadoProp, confirmarAutomaticamente, onConfirm])
 
   const campeoesOrdenados = campeoes.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0))
 
@@ -26,12 +35,12 @@ export const PicksBans = ({
     }
 
     onSelectCampeao(campeao)
-    setCampeaoSelecionado(campeao)
+    setCampeaoSelecionadoLocal(campeao)
   }
 
   const handleConfirmarCampeao = () => {
     onConfirm(campeaoSelecionado)
-    setCampeaoSelecionado(null)
+    setCampeaoSelecionadoLocal(null)
   }
 
   return (
@@ -63,7 +72,7 @@ export const PicksBans = ({
         {selecaoAtiva && (
           <Button
             height={35}
-            disabled={selecaoRotasAtiva ? !campeaoSelecionado : !campeaoSelecionado}
+            disabled={!campeaoSelecionado}
             onClick={handleConfirmarCampeao}
           >
             Select champion

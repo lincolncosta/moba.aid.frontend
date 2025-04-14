@@ -1,60 +1,92 @@
-import React, { memo, useState } from 'react'
-
+import React, { memo, useCallback, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
+
+import { getSugestao } from 'api/sugestao'
 
 import { Box } from 'components/Box'
 import { Text } from 'components/Text'
 import { PicksBans } from 'components/PicksBans'
 import { Button } from 'components/Button'
 import { CampeaoBanido } from 'components/CampeaoBanido'
+import campeoesDataset from '../../database/champions.json'
 
-const bansArray = [
-  { round: 0, campeao: null },
-  { round: 1, campeao: null },
-  { round: 2, campeao: null },
-  { round: 3, campeao: null },
-  { round: 4, campeao: null },
-  { round: 5, campeao: null },
-  { round: 6, campeao: null },
-  { round: 7, campeao: null },
-  { round: 8, campeao: null },
-  { round: 9, campeao: null }
-]
+const bansArray = Array.from({ length: 10 }, (_, i) => ({ round: i, campeao: null }))
 
 export const Banimentos = memo(() => {
   const history = useHistory()
-
   const [round, setRound] = useState(0)
   const [bans, setBans] = useState(bansArray)
   const [bloqueados, setBloqueados] = useState([])
-  const [time, setTime] = useState([])
+  const [loading, setLoading] = useState(false)
+  const time = history.location.state.meuTime
+  const patch = '25.06'
 
-  const confirmaSelecaoCampeao = () => {
-    if (round < 10) {
-      setRound(round + 1)
+  const selecionaCampeao = useCallback((campeaoSelecionado) => {
+    setBans((prevBans) => {
+      const novosBans = [...prevBans]
+      const posicao = round
+      if (posicao >= 0 && posicao < novosBans.length) {
+        novosBans[posicao] = {
+          ...novosBans[posicao],
+          campeao: campeaoSelecionado
+        }
+      }
 
-      setBloqueados(bans.map((b) => b.campeao).filter((c) => c))
-    }
-  }
+      return novosBans
+    })
+  }, [round])
 
-  const selecionaCampeao = (campeaoSelecionado) => {
-    const posicao = bans.findIndex((p) => p.round === round)
+  const confirmaSelecaoCampeao = useCallback(() => {
+    setBloqueados(() =>
+      bans.map((b) => b.campeao).filter(Boolean)
+    )
 
-    bans[posicao].campeao = campeaoSelecionado
-
-    setBans([...bans])
-  }
+    setRound((prevRound) => {
+      const updated = prevRound + 1
+      return updated
+    })
+  }, [bans])
 
   const terminarBans = () => {
+    console.log(bans.map(obj => obj.campeao))
     history.push({
       pathname: '/picks',
-      state: { bloqueados: bloqueados, meuTime: time }
+      state: { bloqueados: bans.map(obj => obj.campeao).filter(Boolean), meuTime: time }
     })
   }
 
-  const handleSelectTime = (e) => {
-    setTime(e.target.value)
-  }
+  const buscarBanimentoDoAlgoritmo = useCallback(async () => {
+    setLoading(true)
+
+    const campeoesBanidos = bans.map((b) => b.campeao).filter(Boolean).map(c => c.name)
+
+    const sugestoes = await getSugestao({
+      patch,
+      objective: 'BAN',
+      numChampions: 1,
+      selectedChampions: [],
+      bannedChampions: campeoesBanidos,
+      enemyChampions: []
+    })
+    const campeaoSugerido = sugestoes.suggestions[0]
+    const campeao = campeoesDataset.find((c) => c.name === campeaoSugerido.champion)
+    selecionaCampeao(campeao)
+    confirmaSelecaoCampeao()
+    setLoading(false)
+  }, [bans, patch, selecionaCampeao, confirmaSelecaoCampeao])
+
+  useEffect(() => {
+    const tecnicoRounds = time === 'BLUE'
+      ? [0, 2, 4, 6, 8]
+      : [1, 3, 5, 7, 9]
+
+    if (!tecnicoRounds.includes(round) && round < 10 && !bans[round]?.campeao && !loading) {
+      buscarBanimentoDoAlgoritmo()
+    }
+  }, [round, time, bans, buscarBanimentoDoAlgoritmo, loading])
+
+  const isTurnoDoTecnico = (time === 'BLUE' && [0, 2, 4, 6, 8].includes(round)) ||
+    (time === 'RED' && [1, 3, 5, 7, 9].includes(round))
 
   return (
     <Box display="flex" flex={1} flexDirection="column" alignItems="center">
@@ -68,51 +100,27 @@ export const Banimentos = memo(() => {
         alignItems="center"
         width="50%"
         bloqueados={bloqueados}
-        selecaoAtiva={round < 10}
-        onSelectCampeao={round < 10 ? selecionaCampeao : () => {}}
+        selecaoAtiva={round < 10 && isTurnoDoTecnico}
+        onSelectCampeao={selecionaCampeao}
         onConfirm={confirmaSelecaoCampeao}
       />
 
       <Box mt={10} display="flex" flex={1}>
         <Box mr={20} display="flex">
-          <CampeaoBanido ativo={round === 0} color="cyan" campeao={bans[0]?.campeao} />
-          <CampeaoBanido ativo={round === 1} color="cyan" campeao={bans[1]?.campeao} />
-          <CampeaoBanido ativo={round === 2} color="cyan" campeao={bans[2]?.campeao} />
-          <CampeaoBanido ativo={round === 3} color="cyan" campeao={bans[3]?.campeao} />
-          <CampeaoBanido ativo={round === 4} color="cyan" campeao={bans[4]?.campeao} />
+          {[0, 2, 4, 6, 8].map((r, i) => (
+            <CampeaoBanido key={r} ativo={round === r} color="cyan" campeao={bans[r]?.campeao} />
+          ))}
         </Box>
         <Box display="flex">
-          <CampeaoBanido ativo={round === 5} color="red" campeao={bans[5]?.campeao} />
-          <CampeaoBanido ativo={round === 6} color="red" campeao={bans[6]?.campeao} />
-          <CampeaoBanido ativo={round === 7} color="red" campeao={bans[7]?.campeao} />
-          <CampeaoBanido ativo={round === 8} color="red" campeao={bans[8]?.campeao} />
-          <CampeaoBanido ativo={round === 9} color="red" campeao={bans[9]?.campeao} />
+          {[1, 3, 5, 7, 9].map((r, i) => (
+            <CampeaoBanido key={r} ativo={round === r} color="red" campeao={bans[r]?.campeao} />
+          ))}
         </Box>
       </Box>
 
-      <Text fontWeight={3} fontSize={40} color="textColor" mt={10} mb={10}>
-        Which side are you playing?
-      </Text>
-
-      <div className="radio">
-        <label>
-          <input type="radio" name="meuTime" value="BLUE" onChange={handleSelectTime} />
-          <Text fontWeight={2} fontSize={15} color="textColor">
-            Blue team
-          </Text>
-        </label>
-      </div>
-      <div className="radio">
-        <label>
-          <input type="radio" name="meuTime" value="RED" onChange={handleSelectTime} />
-          <Text fontWeight={2} fontSize={15} color="textColor">
-            Red team
-          </Text>
-        </label>
-      </div>
-
+      <Box>{ bans?.length }</Box>
       <Box mt={10} mb={10} display="flex" justifyContent="center">
-        <Button disabled={!bloqueados.length !== 10 && !time.length} onClick={() => terminarBans()}>
+        <Button disabled={bans.length !== 10} onClick={terminarBans}>
           Next step
         </Button>
       </Box>
