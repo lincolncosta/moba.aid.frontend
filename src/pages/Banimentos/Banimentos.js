@@ -48,7 +48,6 @@ export const Banimentos = memo(() => {
   }, [bans])
 
   const terminarBans = () => {
-    console.log(bans.map(obj => obj.campeao))
     history.push({
       pathname: '/picks',
       state: { bloqueados: bans.map(obj => obj.campeao).filter(Boolean), meuTime: time }

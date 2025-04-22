@@ -123,10 +123,7 @@ export const SelecaoCampeoes = memo(() => {
     }
 
     const campeaoSugerido = await getSugestao(updatedParams)
-    console.log(campeaoSugerido.suggestions[0])
-    console.log(campeoesDataset)
     const campeao = campeoesDataset.find((c) => c.name === campeaoSugerido.suggestions[0].champion)
-    console.log(campeao)
     selecionaCampeao(campeao)
     atualizaTimeGA(campeaoSugerido.suggestions[0].champion, campeaoSugerido.suggestions[0].role)
     confirmaSelecaoCampeao()
