@@ -43,7 +43,7 @@ export const SelecaoCampeoes = memo(() => {
     bannedChampions: [],
     selectedChampions: {},
     selectedRoles: [],
-    patch: '15.07',
+    patch: '15.08',
     objective: 'PICK'
   })
 

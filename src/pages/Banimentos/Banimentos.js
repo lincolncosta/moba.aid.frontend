@@ -19,7 +19,7 @@ export const Banimentos = memo(() => {
   const [bloqueados, setBloqueados] = useState([])
   const [loading, setLoading] = useState(false)
   const time = history.location.state.meuTime
-  const patch = '25.06'
+  const patch = '15.08'
 
   const selecionaCampeao = useCallback((campeaoSelecionado) => {
     setBans((prevBans) => {
