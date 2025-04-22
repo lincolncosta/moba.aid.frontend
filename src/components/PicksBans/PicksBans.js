@@ -16,8 +16,10 @@ export const PicksBans = ({
   onConfirm,
   campeaoSelecionado: campeaoSelecionadoProp,
   confirmarAutomaticamente,
+  loading,
   ...props
 }) => {
+
   const [campeaoSelecionadoLocal, setCampeaoSelecionadoLocal] = useState(null)
   const campeaoSelecionado = campeaoSelecionadoProp || campeaoSelecionadoLocal
 
@@ -30,6 +32,9 @@ export const PicksBans = ({
   const campeoesOrdenados = campeoes.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0))
 
   const handleSelectCampeao = (campeao) => {
+
+    if (loading) { return }
+
     if (bloqueados.find((c) => c.id === campeao.id)) {
       return
     }
@@ -61,7 +66,7 @@ export const PicksBans = ({
               key={campeao.id}
               nome={campeao.name}
               alias={campeao.alias}
-              bloqueado={bloqueados.find((c) => c.id === campeao.id)}
+              bloqueado={loading || bloqueados.find((c) => c.id === campeao.id)}
               selecionado={campeao.id === campeaoSelecionado?.id}
               onClick={() => handleSelectCampeao(campeao)}
             />
@@ -72,7 +77,7 @@ export const PicksBans = ({
         {selecaoAtiva && (
           <Button
             height={35}
-            disabled={!campeaoSelecionado}
+            disabled={!campeaoSelecionado || loading}
             onClick={handleConfirmarCampeao}
           >
             Select champion

@@ -100,6 +100,7 @@ export const Banimentos = memo(() => {
         alignItems="center"
         width="50%"
         bloqueados={bloqueados}
+        loading={loading}
         selecaoAtiva={round < 10 && isTurnoDoTecnico}
         onSelectCampeao={selecionaCampeao}
         onConfirm={confirmaSelecaoCampeao}
