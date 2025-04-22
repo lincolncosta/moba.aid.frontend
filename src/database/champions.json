@@ -1,1249 +1,1022 @@
 [
   {
-    "id": -1,
-    "name": "Nenhum",
-    "alias": "None",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/-1.png",
-    "roles": []
-  },
-  {
-    "id": 1,
-    "name": "Annie",
-    "alias": "Annie",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/1.png",
-    "roles": ["mage"],
-    "lanes": ["mid"]
-  },
-  {
-    "id": 2,
-    "name": "Olaf",
-    "alias": "Olaf",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/2.png",
-    "roles": ["fighter", "tank"],
-    "lanes": ["jungle"]
-  },
-  {
-    "id": 3,
-    "name": "Galio",
-    "alias": "Galio",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/3.png",
-    "roles": ["tank", "mage"],
-    "lanes": ["mid", "support"]
-  },
-  {
-    "id": 4,
-    "name": "Twisted Fate",
-    "alias": "TwistedFate",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/4.png",
-    "roles": ["mage"],
-    "lanes": ["mid"]
-  },
-  {
-    "id": 5,
-    "name": "Xin Zhao",
-    "alias": "XinZhao",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/5.png",
-    "roles": ["fighter", "assassin"],
-    "lanes": ["jungle"]
-  },
-  {
-    "id": 6,
-    "name": "Urgot",
-    "alias": "Urgot",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/6.png",
-    "roles": ["fighter", "tank"],
-    "lanes": ["top"]
-  },
-  {
-    "id": 7,
-    "name": "LeBlanc",
-    "alias": "Leblanc",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/7.png",
-    "roles": ["assassin", "mage"],
-    "lanes": ["mid"]
-  },
-  {
-    "id": 8,
-    "name": "Vladimir",
-    "alias": "Vladimir",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/8.png",
-    "roles": ["mage"],
-    "lanes": ["mid"]
-  },
-  {
-    "id": 9,
-    "name": "Fiddlesticks",
-    "alias": "Fiddlesticks",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/9.png",
-    "roles": ["mage", "support"],
-    "lanes": ["jungle"]
-  },
-  {
-    "id": 10,
-    "name": "Kayle",
-    "alias": "Kayle",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/10.png",
-    "roles": ["fighter", "support"],
-    "lanes": ["top"]
-  },
-  {
-    "id": 11,
-    "name": "Master Yi",
-    "alias": "MasterYi",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/11.png",
-    "roles": ["assassin", "fighter"],
-    "lanes": ["jungle"]
-  },
-  {
-    "id": 12,
-    "name": "Alistar",
-    "alias": "Alistar",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/12.png",
-    "roles": ["tank", "support"],
-    "lanes": ["support"]
+    "id":"266",
+    "name":"Aatrox",
+    "alias":"Aatrox",
+    "squarePortraitPath":"Aatrox.png"
   },
   {
-    "id": 13,
-    "name": "Ryze",
-    "alias": "Ryze",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/13.png",
-    "roles": ["mage", "fighter"],
-    "lanes": ["mid"]
+    "id":"103",
+    "name":"Ahri",
+    "alias":"Ahri",
+    "squarePortraitPath":"Ahri.png"
   },
   {
-    "id": 14,
-    "name": "Sion",
-    "alias": "Sion",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/14.png",
-    "roles": ["tank", "fighter"],
-    "lanes": ["top"]
+    "id":"84",
+    "name":"Akali",
+    "alias":"Akali",
+    "squarePortraitPath":"Akali.png"
   },
   {
-    "id": 15,
-    "name": "Sivir",
-    "alias": "Sivir",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/15.png",
-    "roles": ["marksman"],
-    "lanes": ["adc"]
+    "id":"166",
+    "name":"Akshan",
+    "alias":"Akshan",
+    "squarePortraitPath":"Akshan.png"
   },
   {
-    "id": 16,
-    "name": "Soraka",
-    "alias": "Soraka",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/16.png",
-    "roles": ["support", "mage"],
-    "lanes": ["support"]
+    "id":"12",
+    "name":"Alistar",
+    "alias":"Alistar",
+    "squarePortraitPath":"Alistar.png"
   },
   {
-    "id": 17,
-    "name": "Teemo",
-    "alias": "Teemo",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/17.png",
-    "roles": ["marksman", "assassin"],
-    "lanes": ["top"]
+    "id":"799",
+    "name":"Ambessa",
+    "alias":"Ambessa",
+    "squarePortraitPath":"Ambessa.png"
   },
   {
-    "id": 18,
-    "name": "Tristana",
-    "alias": "Tristana",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/18.png",
-    "roles": ["marksman", "assassin"],
-    "lanes": ["adc"]
+    "id":"32",
+    "name":"Amumu",
+    "alias":"Amumu",
+    "squarePortraitPath":"Amumu.png"
   },
   {
-    "id": 19,
-    "name": "Warwick",
-    "alias": "Warwick",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/19.png",
-    "roles": ["fighter", "tank"],
-    "lanes": ["jungle"]
+    "id":"34",
+    "name":"Anivia",
+    "alias":"Anivia",
+    "squarePortraitPath":"Anivia.png"
   },
   {
-    "id": 20,
-    "name": "Nunu e Willump",
-    "alias": "Nunu",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/20.png",
-    "roles": ["tank", "fighter"],
-    "lanes": ["jungle"]
+    "id":"1",
+    "name":"Annie",
+    "alias":"Annie",
+    "squarePortraitPath":"Annie.png"
   },
   {
-    "id": 21,
-    "name": "Miss Fortune",
-    "alias": "MissFortune",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/21.png",
-    "roles": ["marksman"],
-    "lanes": ["adc"]
+    "id":"523",
+    "name":"Aphelios",
+    "alias":"Aphelios",
+    "squarePortraitPath":"Aphelios.png"
   },
   {
-    "id": 22,
-    "name": "Ashe",
-    "alias": "Ashe",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/22.png",
-    "roles": ["marksman", "support"],
-    "lanes": ["adc"]
+    "id":"22",
+    "name":"Ashe",
+    "alias":"Ashe",
+    "squarePortraitPath":"Ashe.png"
   },
   {
-    "id": 23,
-    "name": "Tryndamere",
-    "alias": "Tryndamere",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/23.png",
-    "roles": ["fighter", "assassin"],
-    "lanes": ["top"]
+    "id":"136",
+    "name":"Aurelion Sol",
+    "alias":"AurelionSol",
+    "squarePortraitPath":"AurelionSol.png"
   },
   {
-    "id": 24,
-    "name": "Jax",
-    "alias": "Jax",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/24.png",
-    "roles": ["fighter", "assassin"],
-    "lanes": ["top"]
+    "id":"893",
+    "name":"Aurora",
+    "alias":"Aurora",
+    "squarePortraitPath":"Aurora.png"
   },
   {
-    "id": 25,
-    "name": "Morgana",
-    "alias": "Morgana",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/25.png",
-    "roles": ["mage", "support"],
-    "lanes": ["jungle", "support"]
+    "id":"268",
+    "name":"Azir",
+    "alias":"Azir",
+    "squarePortraitPath":"Azir.png"
   },
   {
-    "id": 26,
-    "name": "Zilean",
-    "alias": "Zilean",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/26.png",
-    "roles": ["support", "mage"],
-    "lanes": ["support"]
+    "id":"432",
+    "name":"Bard",
+    "alias":"Bard",
+    "squarePortraitPath":"Bard.png"
   },
   {
-    "id": 27,
-    "name": "Singed",
-    "alias": "Singed",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/27.png",
-    "roles": ["tank", "fighter"],
-    "lanes": ["top"]
+    "id":"200",
+    "name":"Bel'Veth",
+    "alias":"Belveth",
+    "squarePortraitPath":"Belveth.png"
   },
   {
-    "id": 28,
-    "name": "Evelynn",
-    "alias": "Evelynn",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/28.png",
-    "roles": ["assassin", "mage"],
-    "lanes": ["jungle"]
+    "id":"53",
+    "name":"Blitzcrank",
+    "alias":"Blitzcrank",
+    "squarePortraitPath":"Blitzcrank.png"
   },
   {
-    "id": 29,
-    "name": "Twitch",
-    "alias": "Twitch",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/29.png",
-    "roles": ["marksman", "assassin"],
-    "lanes": ["adc"]
+    "id":"63",
+    "name":"Brand",
+    "alias":"Brand",
+    "squarePortraitPath":"Brand.png"
   },
   {
-    "id": 30,
-    "name": "Karthus",
-    "alias": "Karthus",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/30.png",
-    "roles": ["mage"],
-    "lanes": ["jungle"]
+    "id":"201",
+    "name":"Braum",
+    "alias":"Braum",
+    "squarePortraitPath":"Braum.png"
   },
   {
-    "id": 31,
-    "name": "Cho'Gath",
-    "alias": "Chogath",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/31.png",
-    "roles": ["tank", "mage"],
-    "lanes": ["top"]
+    "id":"233",
+    "name":"Briar",
+    "alias":"Briar",
+    "squarePortraitPath":"Briar.png"
   },
   {
-    "id": 32,
-    "name": "Amumu",
-    "alias": "Amumu",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/32.png",
-    "roles": ["tank", "mage"],
-    "lanes": ["top"]
+    "id":"51",
+    "name":"Caitlyn",
+    "alias":"Caitlyn",
+    "squarePortraitPath":"Caitlyn.png"
   },
   {
-    "id": 33,
-    "name": "Rammus",
-    "alias": "Rammus",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/33.png",
-    "roles": ["tank", "fighter"],
-    "lanes": ["jungle"]
+    "id":"164",
+    "name":"Camille",
+    "alias":"Camille",
+    "squarePortraitPath":"Camille.png"
   },
   {
-    "id": 34,
-    "name": "Anivia",
-    "alias": "Anivia",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/34.png",
-    "roles": ["mage", "support"],
-    "lanes": ["mid"]
+    "id":"69",
+    "name":"Cassiopeia",
+    "alias":"Cassiopeia",
+    "squarePortraitPath":"Cassiopeia.png"
   },
   {
-    "id": 35,
-    "name": "Shaco",
-    "alias": "Shaco",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/35.png",
-    "roles": ["assassin"],
-    "lanes": ["jungle", "support"]
+    "id":"31",
+    "name":"Cho'Gath",
+    "alias":"Chogath",
+    "squarePortraitPath":"Chogath.png"
   },
   {
-    "id": 36,
-    "name": "Dr. Mundo",
-    "alias": "DrMundo",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/36.png",
-    "roles": ["fighter", "tank"],
-    "lanes": ["top", "jungle"]
+    "id":"42",
+    "name":"Corki",
+    "alias":"Corki",
+    "squarePortraitPath":"Corki.png"
   },
   {
-    "id": 37,
-    "name": "Sona",
-    "alias": "Sona",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/37.png",
-    "roles": ["support", "mage"],
-    "lanes": ["support"]
+    "id":"122",
+    "name":"Darius",
+    "alias":"Darius",
+    "squarePortraitPath":"Darius.png"
   },
   {
-    "id": 38,
-    "name": "Kassadin",
-    "alias": "Kassadin",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/38.png",
-    "roles": ["assassin", "mage"],
-    "lanes": ["mid"]
+    "id":"131",
+    "name":"Diana",
+    "alias":"Diana",
+    "squarePortraitPath":"Diana.png"
   },
   {
-    "id": 39,
-    "name": "Irelia",
-    "alias": "Irelia",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/39.png",
-    "roles": ["fighter", "assassin"],
-    "lanes": ["top", "mid"]
+    "id":"119",
+    "name":"Draven",
+    "alias":"Draven",
+    "squarePortraitPath":"Draven.png"
   },
   {
-    "id": 40,
-    "name": "Janna",
-    "alias": "Janna",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/40.png",
-    "roles": ["support", "mage"],
-    "lanes": ["support"]
+    "id":"36",
+    "name":"Dr. Mundo",
+    "alias":"DrMundo",
+    "squarePortraitPath":"DrMundo.png"
   },
   {
-    "id": 41,
-    "name": "Gangplank",
-    "alias": "Gangplank",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/41.png",
-    "roles": ["fighter"],
-    "lanes": ["top"]
+    "id":"245",
+    "name":"Ekko",
+    "alias":"Ekko",
+    "squarePortraitPath":"Ekko.png"
   },
   {
-    "id": 42,
-    "name": "Corki",
-    "alias": "Corki",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/42.png",
-    "roles": ["marksman"],
-    "lanes": ["mid"]
+    "id":"60",
+    "name":"Elise",
+    "alias":"Elise",
+    "squarePortraitPath":"Elise.png"
   },
   {
-    "id": 43,
-    "name": "Karma",
-    "alias": "Karma",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/43.png",
-    "roles": ["mage", "support"],
-    "lanes": ["support"]
+    "id":"28",
+    "name":"Evelynn",
+    "alias":"Evelynn",
+    "squarePortraitPath":"Evelynn.png"
   },
   {
-    "id": 44,
-    "name": "Taric",
-    "alias": "Taric",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/44.png",
-    "roles": ["support", "fighter"],
-    "lanes": ["support"]
+    "id":"81",
+    "name":"Ezreal",
+    "alias":"Ezreal",
+    "squarePortraitPath":"Ezreal.png"
   },
   {
-    "id": 45,
-    "name": "Veigar",
-    "alias": "Veigar",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/45.png",
-    "roles": ["mage"],
-    "lanes": ["mid"]
+    "id":"9",
+    "name":"Fiddlesticks",
+    "alias":"Fiddlesticks",
+    "squarePortraitPath":"Fiddlesticks.png"
   },
   {
-    "id": 48,
-    "name": "Trundle",
-    "alias": "Trundle",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/48.png",
-    "roles": ["fighter", "tank"],
-    "lanes": ["jungle"]
+    "id":"114",
+    "name":"Fiora",
+    "alias":"Fiora",
+    "squarePortraitPath":"Fiora.png"
   },
   {
-    "id": 50,
-    "name": "Swain",
-    "alias": "Swain",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/50.png",
-    "roles": ["mage", "fighter"],
-    "lanes": ["support"]
+    "id":"105",
+    "name":"Fizz",
+    "alias":"Fizz",
+    "squarePortraitPath":"Fizz.png"
   },
   {
-    "id": 51,
-    "name": "Caitlyn",
-    "alias": "Caitlyn",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/51.png",
-    "roles": ["marksman"],
-    "lanes": ["adc"]
+    "id":"3",
+    "name":"Galio",
+    "alias":"Galio",
+    "squarePortraitPath":"Galio.png"
   },
   {
-    "id": 53,
-    "name": "Blitzcrank",
-    "alias": "Blitzcrank",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/53.png",
-    "roles": ["tank", "fighter"],
-    "lanes": ["support"]
+    "id":"41",
+    "name":"Gangplank",
+    "alias":"Gangplank",
+    "squarePortraitPath":"Gangplank.png"
   },
   {
-    "id": 54,
-    "name": "Malphite",
-    "alias": "Malphite",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/54.png",
-    "roles": ["tank", "fighter"],
-    "lanes": ["top"]
+    "id":"86",
+    "name":"Garen",
+    "alias":"Garen",
+    "squarePortraitPath":"Garen.png"
   },
   {
-    "id": 55,
-    "name": "Katarina",
-    "alias": "Katarina",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/55.png",
-    "roles": ["assassin", "mage"],
-    "lanes": ["mid"]
+    "id":"150",
+    "name":"Gnar",
+    "alias":"Gnar",
+    "squarePortraitPath":"Gnar.png"
   },
   {
-    "id": 56,
-    "name": "Nocturne",
-    "alias": "Nocturne",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/56.png",
-    "roles": ["assassin", "fighter"],
-    "lanes": ["jungle"]
+    "id":"79",
+    "name":"Gragas",
+    "alias":"Gragas",
+    "squarePortraitPath":"Gragas.png"
   },
   {
-    "id": 57,
-    "name": "Maokai",
-    "alias": "Maokai",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/57.png",
-    "roles": ["tank", "mage"],
-    "lanes": ["support"]
+    "id":"104",
+    "name":"Graves",
+    "alias":"Graves",
+    "squarePortraitPath":"Graves.png"
   },
   {
-    "id": 58,
-    "name": "Renekton",
-    "alias": "Renekton",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/58.png",
-    "roles": ["fighter", "tank"],
-    "lanes": ["top"]
+    "id":"887",
+    "name":"Gwen",
+    "alias":"Gwen",
+    "squarePortraitPath":"Gwen.png"
   },
   {
-    "id": 59,
-    "name": "Jarvan IV",
-    "alias": "JarvanIV",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/59.png",
-    "roles": ["tank", "fighter"],
-    "lanes": ["jungle"]
+    "id":"120",
+    "name":"Hecarim",
+    "alias":"Hecarim",
+    "squarePortraitPath":"Hecarim.png"
   },
   {
-    "id": 60,
-    "name": "Elise",
-    "alias": "Elise",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/60.png",
-    "roles": ["mage", "fighter"],
-    "lanes": ["jungle"]
+    "id":"74",
+    "name":"Heimerdinger",
+    "alias":"Heimerdinger",
+    "squarePortraitPath":"Heimerdinger.png"
   },
   {
-    "id": 61,
-    "name": "Orianna",
-    "alias": "Orianna",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/61.png",
-    "roles": ["mage", "support"],
-    "lanes": ["mid"]
+    "id":"910",
+    "name":"Hwei",
+    "alias":"Hwei",
+    "squarePortraitPath":"Hwei.png"
   },
   {
-    "id": 62,
-    "name": "Wukong",
-    "alias": "MonkeyKing",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/62.png",
-    "roles": ["fighter", "tank"],
-    "lanes": ["top"]
+    "id":"420",
+    "name":"Illaoi",
+    "alias":"Illaoi",
+    "squarePortraitPath":"Illaoi.png"
   },
   {
-    "id": 63,
-    "name": "Brand",
-    "alias": "Brand",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/63.png",
-    "roles": ["mage"],
-    "lanes": ["support"]
+    "id":"39",
+    "name":"Irelia",
+    "alias":"Irelia",
+    "squarePortraitPath":"Irelia.png"
   },
   {
-    "id": 64,
-    "name": "Lee Sin",
-    "alias": "LeeSin",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/64.png",
-    "roles": ["fighter", "assassin"],
-    "lanes": ["top", "jungle"]
+    "id":"427",
+    "name":"Ivern",
+    "alias":"Ivern",
+    "squarePortraitPath":"Ivern.png"
   },
   {
-    "id": 67,
-    "name": "Vayne",
-    "alias": "Vayne",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/67.png",
-    "roles": ["marksman", "assassin"],
-    "lanes": ["adc"]
+    "id":"40",
+    "name":"Janna",
+    "alias":"Janna",
+    "squarePortraitPath":"Janna.png"
   },
   {
-    "id": 68,
-    "name": "Rumble",
-    "alias": "Rumble",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/68.png",
-    "roles": ["fighter", "mage"],
-    "lanes": ["jungle"]
+    "id":"59",
+    "name":"Jarvan IV",
+    "alias":"JarvanIV",
+    "squarePortraitPath":"JarvanIV.png"
   },
   {
-    "id": 69,
-    "name": "Cassiopeia",
-    "alias": "Cassiopeia",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/69.png",
-    "roles": ["mage"],
-    "lanes": ["mid"]
+    "id":"24",
+    "name":"Jax",
+    "alias":"Jax",
+    "squarePortraitPath":"Jax.png"
   },
   {
-    "id": 72,
-    "name": "Skarner",
-    "alias": "Skarner",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/72.png",
-    "roles": ["fighter", "tank"],
-    "lanes": ["jungle"]
+    "id":"126",
+    "name":"Jayce",
+    "alias":"Jayce",
+    "squarePortraitPath":"Jayce.png"
   },
   {
-    "id": 74,
-    "name": "Heimerdinger",
-    "alias": "Heimerdinger",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/74.png",
-    "roles": ["mage", "support"],
-    "lanes": ["top", "mid"]
+    "id":"202",
+    "name":"Jhin",
+    "alias":"Jhin",
+    "squarePortraitPath":"Jhin.png"
   },
   {
-    "id": 75,
-    "name": "Nasus",
-    "alias": "Nasus",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/75.png",
-    "roles": ["fighter", "tank"],
-    "lanes": ["top"]
+    "id":"222",
+    "name":"Jinx",
+    "alias":"Jinx",
+    "squarePortraitPath":"Jinx.png"
   },
   {
-    "id": 76,
-    "name": "Nidalee",
-    "alias": "Nidalee",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/76.png",
-    "roles": ["assassin", "mage"],
-    "lanes": ["jungle"]
+    "id":"145",
+    "name":"Kai'Sa",
+    "alias":"Kaisa",
+    "squarePortraitPath":"Kaisa.png"
   },
   {
-    "id": 77,
-    "name": "Udyr",
-    "alias": "Udyr",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/77.png",
-    "roles": ["fighter", "tank"],
-    "lanes": ["jungle"]
+    "id":"429",
+    "name":"Kalista",
+    "alias":"Kalista",
+    "squarePortraitPath":"Kalista.png"
   },
   {
-    "id": 78,
-    "name": "Poppy",
-    "alias": "Poppy",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/78.png",
-    "roles": ["tank", "fighter"],
-    "lanes": ["top", "jungle"]
+    "id":"43",
+    "name":"Karma",
+    "alias":"Karma",
+    "squarePortraitPath":"Karma.png"
   },
   {
-    "id": 79,
-    "name": "Gragas",
-    "alias": "Gragas",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/79.png",
-    "roles": ["fighter", "mage"],
-    "lanes": ["jungle"]
+    "id":"30",
+    "name":"Karthus",
+    "alias":"Karthus",
+    "squarePortraitPath":"Karthus.png"
   },
   {
-    "id": 80,
-    "name": "Pantheon",
-    "alias": "Pantheon",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/80.png",
-    "roles": ["fighter", "assassin"],
-    "lanes": ["support"]
+    "id":"38",
+    "name":"Kassadin",
+    "alias":"Kassadin",
+    "squarePortraitPath":"Kassadin.png"
   },
   {
-    "id": 81,
-    "name": "Ezreal",
-    "alias": "Ezreal",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/81.png",
-    "roles": ["marksman", "mage"],
-    "lanes": ["adc"]
+    "id":"55",
+    "name":"Katarina",
+    "alias":"Katarina",
+    "squarePortraitPath":"Katarina.png"
   },
   {
-    "id": 82,
-    "name": "Mordekaiser",
-    "alias": "Mordekaiser",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/82.png",
-    "roles": ["fighter"],
-    "lanes": ["top"]
+    "id":"10",
+    "name":"Kayle",
+    "alias":"Kayle",
+    "squarePortraitPath":"Kayle.png"
   },
   {
-    "id": 83,
-    "name": "Yorick",
-    "alias": "Yorick",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/83.png",
-    "roles": ["fighter", "tank"],
-    "lanes": ["top"]
+    "id":"141",
+    "name":"Kayn",
+    "alias":"Kayn",
+    "squarePortraitPath":"Kayn.png"
   },
   {
-    "id": 84,
-    "name": "Akali",
-    "alias": "Akali",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/84.png",
-    "roles": ["assassin"],
-    "lanes": ["top", "mid"]
+    "id":"85",
+    "name":"Kennen",
+    "alias":"Kennen",
+    "squarePortraitPath":"Kennen.png"
   },
   {
-    "id": 85,
-    "name": "Kennen",
-    "alias": "Kennen",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/85.png",
-    "roles": ["mage", "marksman"],
-    "lanes": ["top"]
+    "id":"121",
+    "name":"Kha'Zix",
+    "alias":"Khazix",
+    "squarePortraitPath":"Khazix.png"
   },
   {
-    "id": 86,
-    "name": "Garen",
-    "alias": "Garen",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/86.png",
-    "roles": ["fighter", "tank"],
-    "lanes": ["top"]
+    "id":"203",
+    "name":"Kindred",
+    "alias":"Kindred",
+    "squarePortraitPath":"Kindred.png"
   },
   {
-    "id": 89,
-    "name": "Leona",
-    "alias": "Leona",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/89.png",
-    "roles": ["tank", "support"],
-    "lanes": ["support"]
+    "id":"240",
+    "name":"Kled",
+    "alias":"Kled",
+    "squarePortraitPath":"Kled.png"
   },
   {
-    "id": 90,
-    "name": "Malzahar",
-    "alias": "Malzahar",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/90.png",
-    "roles": ["mage", "assassin"],
-    "lanes": ["mid"]
+    "id":"96",
+    "name":"Kog'Maw",
+    "alias":"KogMaw",
+    "squarePortraitPath":"KogMaw.png"
   },
   {
-    "id": 91,
-    "name": "Talon",
-    "alias": "Talon",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/91.png",
-    "roles": ["assassin"],
-    "lanes": ["mid"]
+    "id":"897",
+    "name":"K'Sante",
+    "alias":"KSante",
+    "squarePortraitPath":"KSante.png"
   },
   {
-    "id": 92,
-    "name": "Riven",
-    "alias": "Riven",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/92.png",
-    "roles": ["fighter", "assassin"],
-    "lanes": ["top"]
+    "id":"7",
+    "name":"LeBlanc",
+    "alias":"Leblanc",
+    "squarePortraitPath":"Leblanc.png"
   },
   {
-    "id": 96,
-    "name": "Kog'Maw",
-    "alias": "KogMaw",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/96.png",
-    "roles": ["marksman", "mage"],
-    "lanes": ["adc"]
+    "id":"64",
+    "name":"Lee Sin",
+    "alias":"LeeSin",
+    "squarePortraitPath":"LeeSin.png"
   },
   {
-    "id": 98,
-    "name": "Shen",
-    "alias": "Shen",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/98.png",
-    "roles": ["tank"],
-    "lanes": ["top"]
+    "id":"89",
+    "name":"Leona",
+    "alias":"Leona",
+    "squarePortraitPath":"Leona.png"
   },
   {
-    "id": 99,
-    "name": "Lux",
-    "alias": "Lux",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/99.png",
-    "roles": ["mage", "support"],
-    "lanes": ["mid", "support"]
+    "id":"876",
+    "name":"Lillia",
+    "alias":"Lillia",
+    "squarePortraitPath":"Lillia.png"
   },
   {
-    "id": 101,
-    "name": "Xerath",
-    "alias": "Xerath",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/101.png",
-    "roles": ["mage"],
-    "lanes": ["mid", "support"]
+    "id":"127",
+    "name":"Lissandra",
+    "alias":"Lissandra",
+    "squarePortraitPath":"Lissandra.png"
   },
   {
-    "id": 102,
-    "name": "Shyvana",
-    "alias": "Shyvana",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/102.png",
-    "roles": ["fighter", "tank"],
-    "lanes": ["jungle"]
+    "id":"236",
+    "name":"Lucian",
+    "alias":"Lucian",
+    "squarePortraitPath":"Lucian.png"
   },
   {
-    "id": 103,
-    "name": "Ahri",
-    "alias": "Ahri",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/103.png",
-    "roles": ["mage", "assassin"],
-    "lanes": ["mid"]
+    "id":"117",
+    "name":"Lulu",
+    "alias":"Lulu",
+    "squarePortraitPath":"Lulu.png"
   },
   {
-    "id": 104,
-    "name": "Graves",
-    "alias": "Graves",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/104.png",
-    "roles": ["marksman"],
-    "lanes": ["jungle"]
+    "id":"99",
+    "name":"Lux",
+    "alias":"Lux",
+    "squarePortraitPath":"Lux.png"
   },
   {
-    "id": 105,
-    "name": "Fizz",
-    "alias": "Fizz",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/105.png",
-    "roles": ["assassin", "fighter"],
-    "lanes": ["mid"]
+    "id":"54",
+    "name":"Malphite",
+    "alias":"Malphite",
+    "squarePortraitPath":"Malphite.png"
   },
   {
-    "id": 106,
-    "name": "Volibear",
-    "alias": "Volibear",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/106.png",
-    "roles": ["fighter", "tank"],
-    "lanes": ["top", "jungle"]
+    "id":"90",
+    "name":"Malzahar",
+    "alias":"Malzahar",
+    "squarePortraitPath":"Malzahar.png"
   },
   {
-    "id": 107,
-    "name": "Rengar",
-    "alias": "Rengar",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/107.png",
-    "roles": ["assassin", "fighter"],
-    "lanes": ["jungle"]
+    "id":"57",
+    "name":"Maokai",
+    "alias":"Maokai",
+    "squarePortraitPath":"Maokai.png"
   },
   {
-    "id": 110,
-    "name": "Varus",
-    "alias": "Varus",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/110.png",
-    "roles": ["marksman", "mage"],
-    "lanes": ["adc"]
+    "id":"11",
+    "name":"Master Yi",
+    "alias":"MasterYi",
+    "squarePortraitPath":"MasterYi.png"
   },
   {
-    "id": 111,
-    "name": "Nautilus",
-    "alias": "Nautilus",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/111.png",
-    "roles": ["tank", "fighter"],
-    "lanes": ["support"]
+    "id":"800",
+    "name":"Mel",
+    "alias":"Mel",
+    "squarePortraitPath":"Mel.png"
   },
   {
-    "id": 112,
-    "name": "Viktor",
-    "alias": "Viktor",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/112.png",
-    "roles": ["mage"],
-    "lanes": ["mid"]
+    "id":"902",
+    "name":"Milio",
+    "alias":"Milio",
+    "squarePortraitPath":"Milio.png"
   },
   {
-    "id": 113,
-    "name": "Sejuani",
-    "alias": "Sejuani",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/113.png",
-    "roles": ["tank", "fighter"],
-    "lanes": ["jungle"]
+    "id":"21",
+    "name":"Miss Fortune",
+    "alias":"MissFortune",
+    "squarePortraitPath":"MissFortune.png"
   },
   {
-    "id": 114,
-    "name": "Fiora",
-    "alias": "Fiora",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/114.png",
-    "roles": ["fighter", "assassin"],
-    "lanes": ["top"]
+    "id":"62",
+    "name":"Wukong",
+    "alias":"MonkeyKing",
+    "squarePortraitPath":"MonkeyKing.png"
   },
   {
-    "id": 115,
-    "name": "Ziggs",
-    "alias": "Ziggs",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/115.png",
-    "roles": ["mage"],
-    "lanes": ["mid"]
+    "id":"82",
+    "name":"Mordekaiser",
+    "alias":"Mordekaiser",
+    "squarePortraitPath":"Mordekaiser.png"
   },
   {
-    "id": 117,
-    "name": "Lulu",
-    "alias": "Lulu",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/117.png",
-    "roles": ["support", "mage"],
-    "lanes": ["support"]
+    "id":"25",
+    "name":"Morgana",
+    "alias":"Morgana",
+    "squarePortraitPath":"Morgana.png"
   },
   {
-    "id": 119,
-    "name": "Draven",
-    "alias": "Draven",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/119.png",
-    "roles": ["marksman"],
-    "lanes": ["adc"]
+    "id":"950",
+    "name":"Naafiri",
+    "alias":"Naafiri",
+    "squarePortraitPath":"Naafiri.png"
   },
   {
-    "id": 120,
-    "name": "Hecarim",
-    "alias": "Hecarim",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/120.png",
-    "roles": ["fighter", "tank"],
-    "lanes": ["jungle"]
+    "id":"267",
+    "name":"Nami",
+    "alias":"Nami",
+    "squarePortraitPath":"Nami.png"
   },
   {
-    "id": 121,
-    "name": "Kha'Zix",
-    "alias": "Khazix",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/121.png",
-    "roles": ["assassin"],
-    "lanes": ["jungle"]
+    "id":"75",
+    "name":"Nasus",
+    "alias":"Nasus",
+    "squarePortraitPath":"Nasus.png"
   },
   {
-    "id": 122,
-    "name": "Darius",
-    "alias": "Darius",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/122.png",
-    "roles": ["fighter", "tank"],
-    "lanes": ["top"]
+    "id":"111",
+    "name":"Nautilus",
+    "alias":"Nautilus",
+    "squarePortraitPath":"Nautilus.png"
   },
   {
-    "id": 126,
-    "name": "Jayce",
-    "alias": "Jayce",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/126.png",
-    "roles": ["fighter", "marksman"],
-    "lanes": ["top"]
+    "id":"518",
+    "name":"Neeko",
+    "alias":"Neeko",
+    "squarePortraitPath":"Neeko.png"
   },
   {
-    "id": 127,
-    "name": "Lissandra",
-    "alias": "Lissandra",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/127.png",
-    "roles": ["mage"],
-    "lanes": ["mid"]
+    "id":"76",
+    "name":"Nidalee",
+    "alias":"Nidalee",
+    "squarePortraitPath":"Nidalee.png"
   },
   {
-    "id": 131,
-    "name": "Diana",
-    "alias": "Diana",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/131.png",
-    "roles": ["fighter", "mage"],
-    "lanes": ["jungle", "mid"]
+    "id":"895",
+    "name":"Nilah",
+    "alias":"Nilah",
+    "squarePortraitPath":"Nilah.png"
   },
   {
-    "id": 133,
-    "name": "Quinn",
-    "alias": "Quinn",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/133.png",
-    "roles": ["marksman", "assassin"],
-    "lanes": ["top"]
+    "id":"56",
+    "name":"Nocturne",
+    "alias":"Nocturne",
+    "squarePortraitPath":"Nocturne.png"
   },
   {
-    "id": 134,
-    "name": "Syndra",
-    "alias": "Syndra",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/134.png",
-    "roles": ["mage", "support"],
-    "lanes": ["mid"]
+    "id":"20",
+    "name":"Nunu & Willump",
+    "alias":"Nunu",
+    "squarePortraitPath":"Nunu.png"
   },
   {
-    "id": 136,
-    "name": "Aurelion Sol",
-    "alias": "AurelionSol",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/136.png",
-    "roles": ["mage"],
-    "lanes": ["mid"]
+    "id":"2",
+    "name":"Olaf",
+    "alias":"Olaf",
+    "squarePortraitPath":"Olaf.png"
   },
   {
-    "id": 141,
-    "name": "Kayn",
-    "alias": "Kayn",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/141.png",
-    "roles": ["fighter", "assassin"],
-    "lanes": ["jungle"]
+    "id":"61",
+    "name":"Orianna",
+    "alias":"Orianna",
+    "squarePortraitPath":"Orianna.png"
   },
   {
-    "id": 142,
-    "name": "Zoe",
-    "alias": "Zoe",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/142.png",
-    "roles": ["mage", "support"],
-    "lanes": ["mid"]
+    "id":"516",
+    "name":"Ornn",
+    "alias":"Ornn",
+    "squarePortraitPath":"Ornn.png"
   },
   {
-    "id": 143,
-    "name": "Zyra",
-    "alias": "Zyra",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/143.png",
-    "roles": ["mage", "support"],
-    "lanes": ["support"]
+    "id":"80",
+    "name":"Pantheon",
+    "alias":"Pantheon",
+    "squarePortraitPath":"Pantheon.png"
   },
   {
-    "id": 145,
-    "name": "Kai'Sa",
-    "alias": "Kaisa",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/145.png",
-    "roles": ["marksman"],
-    "lanes": ["adc"]
+    "id":"78",
+    "name":"Poppy",
+    "alias":"Poppy",
+    "squarePortraitPath":"Poppy.png"
   },
   {
-    "id": 147,
-    "name": "Seraphine",
-    "alias": "Seraphine",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/147.png",
-    "roles": ["mage", "support"],
-    "lanes": ["support"]
+    "id":"555",
+    "name":"Pyke",
+    "alias":"Pyke",
+    "squarePortraitPath":"Pyke.png"
   },
   {
-    "id": 150,
-    "name": "Gnar",
-    "alias": "Gnar",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/150.png",
-    "roles": ["fighter", "tank"],
-    "lanes": ["top"]
+    "id":"246",
+    "name":"Qiyana",
+    "alias":"Qiyana",
+    "squarePortraitPath":"Qiyana.png"
   },
   {
-    "id": 154,
-    "name": "Zac",
-    "alias": "Zac",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/154.png",
-    "roles": ["tank", "fighter"],
-    "lanes": ["jungle"]
+    "id":"133",
+    "name":"Quinn",
+    "alias":"Quinn",
+    "squarePortraitPath":"Quinn.png"
   },
   {
-    "id": 157,
-    "name": "Yasuo",
-    "alias": "Yasuo",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/157.png",
-    "roles": ["fighter", "assassin"],
-    "lanes": ["top", "mid", "adc"]
+    "id":"497",
+    "name":"Rakan",
+    "alias":"Rakan",
+    "squarePortraitPath":"Rakan.png"
   },
   {
-    "id": 161,
-    "name": "Vel'Koz",
-    "alias": "Velkoz",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/161.png",
-    "roles": ["mage"],
-    "lanes": ["support"]
+    "id":"33",
+    "name":"Rammus",
+    "alias":"Rammus",
+    "squarePortraitPath":"Rammus.png"
   },
   {
-    "id": 163,
-    "name": "Taliyah",
-    "alias": "Taliyah",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/163.png",
-    "roles": ["mage", "support"],
-    "lanes": ["jungle"]
+    "id":"421",
+    "name":"Rek'Sai",
+    "alias":"RekSai",
+    "squarePortraitPath":"RekSai.png"
   },
   {
-    "id": 164,
-    "name": "Camille",
-    "alias": "Camille",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/164.png",
-    "roles": ["fighter", "tank"],
-    "lanes": ["top"]
+    "id":"526",
+    "name":"Rell",
+    "alias":"Rell",
+    "squarePortraitPath":"Rell.png"
   },
   {
-    "id": 201,
-    "name": "Braum",
-    "alias": "Braum",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/201.png",
-    "roles": ["support", "tank"],
-    "lanes": ["support"]
+    "id":"888",
+    "name":"Renata Glasc",
+    "alias":"Renata",
+    "squarePortraitPath":"Renata.png"
   },
   {
-    "id": 202,
-    "name": "Jhin",
-    "alias": "Jhin",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/202.png",
-    "roles": ["marksman", "mage"],
-    "lanes": ["adc"]
+    "id":"58",
+    "name":"Renekton",
+    "alias":"Renekton",
+    "squarePortraitPath":"Renekton.png"
   },
   {
-    "id": 203,
-    "name": "Kindred",
-    "alias": "Kindred",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/203.png",
-    "roles": ["marksman"],
-    "lanes": ["jungle"]
+    "id":"107",
+    "name":"Rengar",
+    "alias":"Rengar",
+    "squarePortraitPath":"Rengar.png"
   },
   {
-    "id": 222,
-    "name": "Jinx",
-    "alias": "Jinx",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/222.png",
-    "roles": ["marksman"],
-    "lanes": ["adc"]
+    "id":"92",
+    "name":"Riven",
+    "alias":"Riven",
+    "squarePortraitPath":"Riven.png"
   },
   {
-    "id": 223,
-    "name": "Tahm Kench",
-    "alias": "TahmKench",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/223.png",
-    "roles": ["support", "tank"],
-    "lanes": ["top", "support"]
+    "id":"68",
+    "name":"Rumble",
+    "alias":"Rumble",
+    "squarePortraitPath":"Rumble.png"
   },
   {
-    "id": 234,
-    "name": "Viego",
-    "alias": "Viego",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/234.png",
-    "roles": ["assassin", "fighter"],
-    "lanes": ["jungle", "mid"]
+    "id":"13",
+    "name":"Ryze",
+    "alias":"Ryze",
+    "squarePortraitPath":"Ryze.png"
   },
   {
-    "id": 235,
-    "name": "Senna",
-    "alias": "Senna",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/235.png",
-    "roles": ["marksman", "support"],
-    "lanes": ["adc", "support"]
+    "id":"360",
+    "name":"Samira",
+    "alias":"Samira",
+    "squarePortraitPath":"Samira.png"
   },
   {
-    "id": 236,
-    "name": "Lucian",
-    "alias": "Lucian",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/236.png",
-    "roles": ["marksman"],
-    "lanes": ["mid", "adc"]
+    "id":"113",
+    "name":"Sejuani",
+    "alias":"Sejuani",
+    "squarePortraitPath":"Sejuani.png"
   },
   {
-    "id": 238,
-    "name": "Zed",
-    "alias": "Zed",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/238.png",
-    "roles": ["assassin"],
-    "lanes": ["mid"]
+    "id":"235",
+    "name":"Senna",
+    "alias":"Senna",
+    "squarePortraitPath":"Senna.png"
   },
   {
-    "id": 240,
-    "name": "Kled",
-    "alias": "Kled",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/240.png",
-    "roles": ["fighter", "tank"],
-    "lanes": ["top"]
+    "id":"147",
+    "name":"Seraphine",
+    "alias":"Seraphine",
+    "squarePortraitPath":"Seraphine.png"
   },
   {
-    "id": 245,
-    "name": "Ekko",
-    "alias": "Ekko",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/245.png",
-    "roles": ["assassin", "fighter"],
-    "lanes": ["jungle", "mid"]
+    "id":"875",
+    "name":"Sett",
+    "alias":"Sett",
+    "squarePortraitPath":"Sett.png"
   },
   {
-    "id": 246,
-    "name": "Qiyana",
-    "alias": "Qiyana",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/246.png",
-    "roles": ["assassin", "fighter"],
-    "lanes": ["mid"]
+    "id":"35",
+    "name":"Shaco",
+    "alias":"Shaco",
+    "squarePortraitPath":"Shaco.png"
   },
   {
-    "id": 254,
-    "name": "Vi",
-    "alias": "Vi",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/254.png",
-    "roles": ["fighter", "assassin"],
-    "lanes": ["jungle"]
+    "id":"98",
+    "name":"Shen",
+    "alias":"Shen",
+    "squarePortraitPath":"Shen.png"
   },
   {
-    "id": 266,
-    "name": "Aatrox",
-    "alias": "Aatrox",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/266.png",
-    "roles": ["fighter", "tank"],
-    "lanes": ["top"]
+    "id":"102",
+    "name":"Shyvana",
+    "alias":"Shyvana",
+    "squarePortraitPath":"Shyvana.png"
   },
   {
-    "id": 267,
-    "name": "Nami",
-    "alias": "Nami",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/267.png",
-    "roles": ["support", "mage"],
-    "lanes": ["support"]
+    "id":"27",
+    "name":"Singed",
+    "alias":"Singed",
+    "squarePortraitPath":"Singed.png"
   },
   {
-    "id": 268,
-    "name": "Azir",
-    "alias": "Azir",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/268.png",
-    "roles": ["mage", "marksman"],
-    "lanes": ["mid"]
+    "id":"14",
+    "name":"Sion",
+    "alias":"Sion",
+    "squarePortraitPath":"Sion.png"
   },
   {
-    "id": 350,
-    "name": "Yuumi",
-    "alias": "Yuumi",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/350.png",
-    "roles": ["support", "mage"],
-    "lanes": ["support"]
+    "id":"15",
+    "name":"Sivir",
+    "alias":"Sivir",
+    "squarePortraitPath":"Sivir.png"
   },
   {
-    "id": 360,
-    "name": "Samira",
-    "alias": "Samira",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/360.png",
-    "roles": ["marksman"],
-    "lanes": ["adc"]
+    "id":"72",
+    "name":"Skarner",
+    "alias":"Skarner",
+    "squarePortraitPath":"Skarner.png"
   },
   {
-    "id": 412,
-    "name": "Thresh",
-    "alias": "Thresh",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/412.png",
-    "roles": ["support", "fighter"],
-    "lanes": ["support"]
+    "id":"901",
+    "name":"Smolder",
+    "alias":"Smolder",
+    "squarePortraitPath":"Smolder.png"
   },
   {
-    "id": 420,
-    "name": "Illaoi",
-    "alias": "Illaoi",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/420.png",
-    "roles": ["fighter", "tank"],
-    "lanes": ["top"]
+    "id":"37",
+    "name":"Sona",
+    "alias":"Sona",
+    "squarePortraitPath":"Sona.png"
   },
   {
-    "id": 421,
-    "name": "Rek'Sai",
-    "alias": "RekSai",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/421.png",
-    "roles": ["fighter"],
-    "lanes": ["jungle"]
+    "id":"16",
+    "name":"Soraka",
+    "alias":"Soraka",
+    "squarePortraitPath":"Soraka.png"
   },
   {
-    "id": 427,
-    "name": "Ivern",
-    "alias": "Ivern",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/427.png",
-    "roles": ["support", "mage"],
-    "lanes": ["jungle"]
+    "id":"50",
+    "name":"Swain",
+    "alias":"Swain",
+    "squarePortraitPath":"Swain.png"
   },
   {
-    "id": 429,
-    "name": "Kalista",
-    "alias": "Kalista",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/429.png",
-    "roles": ["marksman"],
-    "lanes": ["adc"]
+    "id":"517",
+    "name":"Sylas",
+    "alias":"Sylas",
+    "squarePortraitPath":"Sylas.png"
   },
   {
-    "id": 432,
-    "name": "Bard",
-    "alias": "Bard",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/432.png",
-    "roles": ["support", "mage"],
-    "lanes": ["support"]
-  },
-  {
-    "id": 497,
-    "name": "Rakan",
-    "alias": "Rakan",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/497.png",
-    "roles": ["support"],
-    "lanes": ["support"]
-  },
-  {
-    "id": 498,
-    "name": "Xayah",
-    "alias": "Xayah",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/498.png",
-    "roles": ["marksman"],
-    "lanes": ["adc"]
-  },
-  {
-    "id": 516,
-    "name": "Ornn",
-    "alias": "Ornn",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/516.png",
-    "roles": ["tank", "fighter"],
-    "lanes": ["top"]
-  },
-  {
-    "id": 517,
-    "name": "Sylas",
-    "alias": "Sylas",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/517.png",
-    "roles": ["mage", "assassin"],
-    "lanes": ["top", "mid"]
-  },
-  {
-    "id": 518,
-    "name": "Neeko",
-    "alias": "Neeko",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/518.png",
-    "roles": ["mage", "support"],
-    "lanes": ["mid"]
-  },
-  {
-    "id": 523,
-    "name": "Aphelios",
-    "alias": "Aphelios",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/523.png",
-    "roles": ["marksman"],
-    "lanes": ["adc"]
-  },
-  {
-    "id": 526,
-    "name": "Rell",
-    "alias": "Rell",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/526.png",
-    "roles": ["tank"],
-    "lanes": ["support"]
-  },
-  {
-    "id": 555,
-    "name": "Pyke",
-    "alias": "Pyke",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/555.png",
-    "roles": ["support", "assassin"],
-    "lanes": ["support"]
-  },
-  {
-    "id": 777,
-    "name": "Yone",
-    "alias": "Yone",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/777.png",
-    "roles": ["assassin", "fighter"],
-    "lanes": ["top", "mid"]
-  },
-  {
-    "id": 875,
-    "name": "Sett",
-    "alias": "Sett",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/875.png",
-    "roles": ["fighter", "tank"],
-    "lanes": ["top", "support"]
-  },
-  {
-    "id": 876,
-    "name": "Lillia",
-    "alias": "Lillia",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/876.png",
-    "roles": ["fighter", "mage"],
-    "lanes": ["jungle"]
-  },
-  {
-    "id": 887,
-    "name": "Gwen",
-    "alias": "Gwen",
-    "squarePortraitPath": "/lol-game-data/assets/v1/champion-icons/887.png",
-    "roles": ["fighter", "assassin"],
-    "lanes": ["top"]
+    "id":"134",
+    "name":"Syndra",
+    "alias":"Syndra",
+    "squarePortraitPath":"Syndra.png"
+  },
+  {
+    "id":"223",
+    "name":"Tahm Kench",
+    "alias":"TahmKench",
+    "squarePortraitPath":"TahmKench.png"
+  },
+  {
+    "id":"163",
+    "name":"Taliyah",
+    "alias":"Taliyah",
+    "squarePortraitPath":"Taliyah.png"
+  },
+  {
+    "id":"91",
+    "name":"Talon",
+    "alias":"Talon",
+    "squarePortraitPath":"Talon.png"
+  },
+  {
+    "id":"44",
+    "name":"Taric",
+    "alias":"Taric",
+    "squarePortraitPath":"Taric.png"
+  },
+  {
+    "id":"17",
+    "name":"Teemo",
+    "alias":"Teemo",
+    "squarePortraitPath":"Teemo.png"
+  },
+  {
+    "id":"412",
+    "name":"Thresh",
+    "alias":"Thresh",
+    "squarePortraitPath":"Thresh.png"
+  },
+  {
+    "id":"18",
+    "name":"Tristana",
+    "alias":"Tristana",
+    "squarePortraitPath":"Tristana.png"
+  },
+  {
+    "id":"48",
+    "name":"Trundle",
+    "alias":"Trundle",
+    "squarePortraitPath":"Trundle.png"
+  },
+  {
+    "id":"23",
+    "name":"Tryndamere",
+    "alias":"Tryndamere",
+    "squarePortraitPath":"Tryndamere.png"
+  },
+  {
+    "id":"4",
+    "name":"Twisted Fate",
+    "alias":"TwistedFate",
+    "squarePortraitPath":"TwistedFate.png"
+  },
+  {
+    "id":"29",
+    "name":"Twitch",
+    "alias":"Twitch",
+    "squarePortraitPath":"Twitch.png"
+  },
+  {
+    "id":"77",
+    "name":"Udyr",
+    "alias":"Udyr",
+    "squarePortraitPath":"Udyr.png"
+  },
+  {
+    "id":"6",
+    "name":"Urgot",
+    "alias":"Urgot",
+    "squarePortraitPath":"Urgot.png"
+  },
+  {
+    "id":"110",
+    "name":"Varus",
+    "alias":"Varus",
+    "squarePortraitPath":"Varus.png"
+  },
+  {
+    "id":"67",
+    "name":"Vayne",
+    "alias":"Vayne",
+    "squarePortraitPath":"Vayne.png"
+  },
+  {
+    "id":"45",
+    "name":"Veigar",
+    "alias":"Veigar",
+    "squarePortraitPath":"Veigar.png"
+  },
+  {
+    "id":"161",
+    "name":"Vel'Koz",
+    "alias":"Velkoz",
+    "squarePortraitPath":"Velkoz.png"
+  },
+  {
+    "id":"711",
+    "name":"Vex",
+    "alias":"Vex",
+    "squarePortraitPath":"Vex.png"
+  },
+  {
+    "id":"254",
+    "name":"Vi",
+    "alias":"Vi",
+    "squarePortraitPath":"Vi.png"
+  },
+  {
+    "id":"234",
+    "name":"Viego",
+    "alias":"Viego",
+    "squarePortraitPath":"Viego.png"
+  },
+  {
+    "id":"112",
+    "name":"Viktor",
+    "alias":"Viktor",
+    "squarePortraitPath":"Viktor.png"
+  },
+  {
+    "id":"8",
+    "name":"Vladimir",
+    "alias":"Vladimir",
+    "squarePortraitPath":"Vladimir.png"
+  },
+  {
+    "id":"106",
+    "name":"Volibear",
+    "alias":"Volibear",
+    "squarePortraitPath":"Volibear.png"
+  },
+  {
+    "id":"19",
+    "name":"Warwick",
+    "alias":"Warwick",
+    "squarePortraitPath":"Warwick.png"
+  },
+  {
+    "id":"498",
+    "name":"Xayah",
+    "alias":"Xayah",
+    "squarePortraitPath":"Xayah.png"
+  },
+  {
+    "id":"101",
+    "name":"Xerath",
+    "alias":"Xerath",
+    "squarePortraitPath":"Xerath.png"
+  },
+  {
+    "id":"5",
+    "name":"Xin Zhao",
+    "alias":"XinZhao",
+    "squarePortraitPath":"XinZhao.png"
+  },
+  {
+    "id":"157",
+    "name":"Yasuo",
+    "alias":"Yasuo",
+    "squarePortraitPath":"Yasuo.png"
+  },
+  {
+    "id":"777",
+    "name":"Yone",
+    "alias":"Yone",
+    "squarePortraitPath":"Yone.png"
+  },
+  {
+    "id":"83",
+    "name":"Yorick",
+    "alias":"Yorick",
+    "squarePortraitPath":"Yorick.png"
+  },
+  {
+    "id":"350",
+    "name":"Yuumi",
+    "alias":"Yuumi",
+    "squarePortraitPath":"Yuumi.png"
+  },
+  {
+    "id":"154",
+    "name":"Zac",
+    "alias":"Zac",
+    "squarePortraitPath":"Zac.png"
+  },
+  {
+    "id":"238",
+    "name":"Zed",
+    "alias":"Zed",
+    "squarePortraitPath":"Zed.png"
+  },
+  {
+    "id":"221",
+    "name":"Zeri",
+    "alias":"Zeri",
+    "squarePortraitPath":"Zeri.png"
+  },
+  {
+    "id":"115",
+    "name":"Ziggs",
+    "alias":"Ziggs",
+    "squarePortraitPath":"Ziggs.png"
+  },
+  {
+    "id":"26",
+    "name":"Zilean",
+    "alias":"Zilean",
+    "squarePortraitPath":"Zilean.png"
+  },
+  {
+    "id":"142",
+    "name":"Zoe",
+    "alias":"Zoe",
+    "squarePortraitPath":"Zoe.png"
+  },
+  {
+    "id":"143",
+    "name":"Zyra",
+    "alias":"Zyra",
+    "squarePortraitPath":"Zyra.png"
   }
 ]
