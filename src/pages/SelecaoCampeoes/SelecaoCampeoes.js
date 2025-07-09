@@ -9,6 +9,7 @@ import { Box } from 'components/Box'
 import { Text } from 'components/Text'
 import { PicksBans } from 'components/PicksBans'
 import campeoesDataset from '../../database/champions.json'
+import { Campeao } from 'components/Campeao'
 
 const blue = [
   { round: 0, rota: null, campeao: null },
@@ -137,6 +138,8 @@ export const SelecaoCampeoes = memo(() => {
     }
   }, [round, buscaCampeoesSugeridos, meuTime, solicitacaoPendente, terminouDraft])
 
+  console.log(bloqueados)
+
 
   return (
     <Box display="flex" flex={1} p={15}>
@@ -164,6 +167,30 @@ export const SelecaoCampeoes = memo(() => {
           onSelectCampeao={selecionaCampeao}
           onConfirm={confirmaSelecaoCampeao}
         />
+
+        {!terminouDraft && (
+          <Box pt={5} display="flex" alignItems="center" flexDirection="column" style={{ borderTop: '1px solid yellow' }}>
+            <Text mb={5} fontWeight={3} fontSize={18} color="textColor">
+              Champions banned
+            </Text>
+            <Box display="flex" justifyContent="space-around">
+              {bloqueados.map((campeao) => {
+                if (campeao.id === -1) return null
+
+                return (
+                  <Campeao
+                    m={5}
+                    key={campeao.id}
+                    nome={campeao.name}
+                    alias={campeao.alias}
+                    bloqueado={true}
+                    selecionado={false}
+                  />
+                )
+              })}
+            </Box>
+          </Box>
+        )}
 
         {terminouDraft && (
           <Box pt={5} display="flex" alignItems="center" flexDirection="column" style={{ borderTop: '1px solid yellow' }}>
