@@ -12,3 +12,54 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Opção 2: Botões toggle */
+.toggle-radio {
+  display: flex;
+  gap: 10px;
+  background: #0f1419;
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid #333;
+}
+
+.toggle-radio .radio-button {
+  flex: 1;
+  padding: 15px 20px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #999;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.toggle-radio .radio-button:hover {
+  background: #1a2332;
+  color: #fff;
+}
+
+.toggle-radio .radio-button.selected {
+  background: #4fc3f7;
+  color: #000;
+  font-weight: 600;
+}
+
+.toggle-radio .radio-button.selected.red {
+  background: #f44336;
+  color: #fff;
+}
+
+.toggle-radio input[type="radio"] {
+  display: none;
+}
+
+.section {
+  margin: 40px 0;
+  padding: 20px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background: #16213e;
+}

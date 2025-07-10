@@ -1,16 +1,46 @@
 import React, { memo, useState } from 'react'
-
 import { useHistory } from 'react-router-dom'
+import styled from 'styled-components'
 
 import { Box } from 'components/Box'
 import { Text } from 'components/Text'
 import { Button } from 'components/Button'
 
+const RadioWrapper = styled.div`
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+`
+
+const RadioLabel = styled.label`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  font-weight: bold;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  user-select: none;
+  color: ${({ team }) => (team === 'blue' ? '#1E90FF' : '#FF4500')};
+  background-color: ${({ team }) => (team === 'blue' ? 'rgba(30, 144, 255, 0.1)' : 'rgba(255, 69, 0, 0.1)')};
+
+  input {
+    display: none;
+  }
+
+  &.checked {
+    background-color: ${({ team }) => (team === 'blue' ? '#1E90FF' : '#FF4500')};
+    color: white;
+    border-color: ${({ team }) => (team === 'blue' ? '#1E90FF' : '#FF4500')};
+  }
+`
 
 export const Side = memo(() => {
   const history = useHistory()
-  const [time, setTime] = useState([])
-
+  const [time, setTime] = useState('')
 
   const terminarSide = () => {
     history.push({
@@ -24,36 +54,37 @@ export const Side = memo(() => {
   }
 
   return (
-    <Box display="flex" flex={1} flexDirection="column" alignItems="center">
-      <Box mb={10} display="flex" flex={1} alignItems="center">
-        <Text fontWeight={3} fontSize={40} color="textColor">
-          Side decision
-        </Text>
-      </Box>
-
-      <Text fontWeight={3} fontSize={40} color="textColor" mt={10} mb={10}>
+    <Box
+      display="flex"
+      flex={1}
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      minHeight="100vh"
+    >
+      <Text fontWeight={3} fontSize={40} color="textColor" mb={10}>
         Which side are you playing?
       </Text>
 
-      <div className="radio">
-        <label>
+      <RadioWrapper>
+        <RadioLabel
+          team="blue"
+          className={time === 'BLUE' ? 'checked' : ''}
+        >
           <input type="radio" name="meuTime" value="BLUE" onChange={handleSelectTime} />
-          <Text fontWeight={2} fontSize={15} color="textColor">
-            Blue team
-          </Text>
-        </label>
-      </div>
-      <div className="radio">
-        <label>
+          💙 Blue team
+        </RadioLabel>
+        <RadioLabel
+          team="red"
+          className={time === 'RED' ? 'checked' : ''}
+        >
           <input type="radio" name="meuTime" value="RED" onChange={handleSelectTime} />
-          <Text fontWeight={2} fontSize={15} color="textColor">
-            Red team
-          </Text>
-        </label>
-      </div>
+          ❤️ Red team
+        </RadioLabel>
+      </RadioWrapper>
 
       <Box mt={10} mb={10} display="flex" justifyContent="center">
-        <Button disabled={!time.length} onClick={() => terminarSide()}>
+        <Button disabled={!time} onClick={() => terminarSide()}>
           Next step
         </Button>
       </Box>

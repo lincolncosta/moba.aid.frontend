@@ -10,6 +10,8 @@ import { Text } from 'components/Text'
 import { PicksBans } from 'components/PicksBans'
 import campeoesDataset from '../../database/champions.json'
 import { Campeao } from 'components/Campeao'
+import { getPredicao } from 'api/predicao'
+import { Button } from 'components/Button'
 
 const blue = [
   { round: 0, rota: null, campeao: null },
@@ -33,9 +35,11 @@ export const SelecaoCampeoes = memo(() => {
   // const [isLoading, setIsLoading] = useState(false)
   const [round, setRound] = useState(0)
   const [terminouDraft, setTerminouDraft] = useState(false)
+  const [predicao, setPredicao] = useState(null)
   const [blueSide, setBlueSide] = useState(blue)
   const [redSide, setRedSide] = useState(red)
   const [timeSelecionando, setTimeSelecionando] = useState('BLUE')
+  const [campeoesBanidos] = useState(history.location.state.bloqueados)
   const [bloqueados, setBloqueados] = useState(history.location.state.bloqueados)
   const [solicitacaoPendente, setSolicitacaoPendente] = useState(false)
   const meuTime = history.location.state.meuTime
@@ -68,11 +72,6 @@ export const SelecaoCampeoes = memo(() => {
       }
       return prevRedSide
     })
-
-    if ([...red, ...blue].every(obj => obj.campeao !== null)) {
-      setTerminouDraft(true)
-    }
-
   }, [timeSelecionando, round])
 
   const atualizaCampeoesBloqueados = useCallback(() => {
@@ -104,6 +103,10 @@ export const SelecaoCampeoes = memo(() => {
       setRound((prevRound) => prevRound + 1) // Atualiza corretamente o estado
       atualizaCampeoesBloqueados()
       setSolicitacaoPendente(false)
+    }
+
+    if ([...red, ...blue].every(obj => obj.campeao && obj.campeao.id)) {
+      setTerminouDraft(true)
     }
   }, [round, atualizaCampeoesBloqueados])
 
@@ -138,8 +141,32 @@ export const SelecaoCampeoes = memo(() => {
     }
   }, [round, buscaCampeoesSugeridos, meuTime, solicitacaoPendente, terminouDraft])
 
-  console.log(bloqueados)
+  useEffect(() => {
+    const fetchPredicao = async () => {
+      if (terminouDraft) {
+        const predicao = await getPredicao(paramsPredicao);
+        setPredicao(predicao);
+      }
+    };
 
+    console.log(params)
+    console.log(meuTime)
+    const timeInimigo = meuTime === "BLUE" ? "red" : "blue";
+    let paramsPredicao = {};
+
+    Object.entries(params.selectedChampions).forEach(([role, champion]) => {
+      paramsPredicao[`${role}_${timeInimigo}`] = champion;
+    });
+    paramsPredicao = {
+      "top_red": "Rumble",
+      "jng_red": "Nocturne",
+      "mid_red": "Taliyah",
+      "bot_red": "Ashe",
+      "sup_red": "Braum"
+    };
+
+    fetchPredicao();
+  }, [terminouDraft, params, meuTime]);
 
   return (
     <Box display="flex" flex={1} p={15}>
@@ -147,7 +174,7 @@ export const SelecaoCampeoes = memo(() => {
         <Box mt={18} flexDirection="column">
           <Box mb={5} display="flex">
             <Text mb={5} fontWeight={3} fontSize={18} color="textColor">
-              Blue Side {timeSelecionando === 'BLUE' ? `(Your team)` : ``}
+              Blue Side {meuTime === 'BLUE' ? `(Your team)` : `(AI team)`}
             </Text>
           </Box>
           <CardBlueSide id={0} ativo={round === 0} numero={1} invocador={blueSide[0]} />
@@ -174,7 +201,7 @@ export const SelecaoCampeoes = memo(() => {
               Champions banned
             </Text>
             <Box display="flex" justifyContent="space-around">
-              {bloqueados.map((campeao) => {
+              {campeoesBanidos?.map((campeao) => {
                 if (campeao.id === -1) return null
 
                 return (
@@ -195,10 +222,14 @@ export const SelecaoCampeoes = memo(() => {
         {terminouDraft && (
           <Box pt={5} display="flex" alignItems="center" flexDirection="column" style={{ borderTop: '1px solid yellow' }}>
             <Text mb={5} fontWeight={3} fontSize={18} color="textColor">
-              Win probability
+              <span role='img' aria-label='robot emoji'>🤖</span>{predicao?.predicted_winner} team is the predicted winner
             </Text>
-            <Box display="flex" justifyContent="space-around">
-              <Box>O time azul/vermelho tem 54% de probabilidade de vitória.</Box>
+            <Box display="flex" justifyContent="space-around" color="textColor">
+              <a href='/'>
+                <Button>
+                  Try again
+                </Button>
+              </a>
             </Box>
           </Box>
         )}
@@ -208,7 +239,7 @@ export const SelecaoCampeoes = memo(() => {
         <Box mt={18} flexDirection="column">
           <Box mb={5} display="flex" justifyContent="flex-end">
             <Text fontWeight={3} fontSize={18} color="textColor">
-              Red Side  {timeSelecionando === 'BLUE' ? `(AI team)` : ``}
+              Red Side  {meuTime === 'BLUE' ? `(AI team)` : `(Your team)`}
             </Text>
           </Box>
           <CardRedSide id={5} ativo={round === 1} numero={1} invocador={redSide[0]} />
