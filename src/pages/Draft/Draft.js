@@ -268,8 +268,33 @@ export const Draft = memo(() => {
                 numero={i + 1}
                 invocador={invocador || { campeao: null, rota: null }}
                 ativo={currentBluePickSlot === i}
-              />
+              >
+                {meuTime === 'BLUE' && invocador?.campeao && (
+                  <RoleSelect
+                    style={{ marginTop: 6 }}
+                    value={userRoles[i] || ''}
+                    onChange={(e) => {
+                      const role = e.target.value || null
+                      setUserRoles(prev => { const next = [...prev]; next[i] = role; return next })
+                    }}
+                  >
+                    <option value="">Role…</option>
+                    {ROLE_OPTIONS.map(({ value, label }) => (
+                      <option key={value} value={value} disabled={userRoles.includes(value) && userRoles[i] !== value}>
+                        {label}
+                      </option>
+                    ))}
+                  </RoleSelect>
+                )}
+              </CardBlueSide>
             ))}
+            {meuTime === 'BLUE' && isDraftComplete && (
+              <Box mt={10}>
+                <Button disabled={!allRolesAssigned || loadingPredicao} onClick={handlePredict}>
+                  {loadingPredicao ? 'Predicting…' : 'Predict Winner'}
+                </Button>
+              </Box>
+            )}
           </Box>
         </Box>
 
@@ -314,53 +339,37 @@ export const Draft = memo(() => {
                 numero={i + 1}
                 invocador={invocador || { campeao: null, rota: null }}
                 ativo={currentRedPickSlot === i}
-              />
+              >
+                {meuTime === 'RED' && invocador?.campeao && (
+                  <RoleSelect
+                    style={{ marginTop: 6 }}
+                    value={userRoles[i] || ''}
+                    onChange={(e) => {
+                      const role = e.target.value || null
+                      setUserRoles(prev => { const next = [...prev]; next[i] = role; return next })
+                    }}
+                  >
+                    <option value="">Role…</option>
+                    {ROLE_OPTIONS.map(({ value, label }) => (
+                      <option key={value} value={value} disabled={userRoles.includes(value) && userRoles[i] !== value}>
+                        {label}
+                      </option>
+                    ))}
+                  </RoleSelect>
+                )}
+              </CardRedSide>
             ))}
+            {meuTime === 'RED' && isDraftComplete && (
+              <Box mt={10} display="flex" justifyContent="flex-end">
+                <Button disabled={!allRolesAssigned || loadingPredicao} onClick={handlePredict}>
+                  {loadingPredicao ? 'Predicting…' : 'Predict Winner'}
+                </Button>
+              </Box>
+            )}
           </Box>
         </Box>
 
       </Box>
-
-      {/* ── Role assignment ── */}
-      {isDraftComplete && !predicao && (
-        <Box pt={5} mt={5} display="flex" alignItems="center" flexDirection="column" style={{ borderTop: '1px solid yellow' }}>
-          <Text mb={10} fontWeight={3} fontSize={18} color="textColor">
-            Assign your champions' roles
-          </Text>
-          <Box display="flex" flexDirection="column" style={{ gap: 8, minWidth: 300 }}>
-            {userPicks.map((pick, i) => (
-              <Box key={i} display="flex" alignItems="center" justifyContent="space-between" style={{ gap: 12 }}>
-                <Text color="textColor" fontSize={16} style={{ minWidth: 150 }}>
-                  {pick?.campeao?.name || `Pick ${i + 1}`}
-                </Text>
-                <RoleSelect
-                  value={userRoles[i] || ''}
-                  onChange={(e) => {
-                    const role = e.target.value || null
-                    setUserRoles(prev => { const next = [...prev]; next[i] = role; return next })
-                  }}
-                >
-                  <option value="">Role…</option>
-                  {ROLE_OPTIONS.map(({ value, label }) => (
-                    <option
-                      key={value}
-                      value={value}
-                      disabled={userRoles.includes(value) && userRoles[i] !== value}
-                    >
-                      {label}
-                    </option>
-                  ))}
-                </RoleSelect>
-              </Box>
-            ))}
-          </Box>
-          <Box mt={10}>
-            <Button disabled={!allRolesAssigned || loadingPredicao} onClick={handlePredict}>
-              {loadingPredicao ? 'Predicting…' : 'Predict Winner'}
-            </Button>
-          </Box>
-        </Box>
-      )}
 
       {/* ── Prediction result ── */}
       {predicao && (

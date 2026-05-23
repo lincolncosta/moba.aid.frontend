@@ -30,7 +30,7 @@ const Card = styled(Box)`
     `}
 `
 
-export const CardRedSide = ({ numero, invocador, ativo, ...props }) => {
+export const CardRedSide = ({ numero, invocador, ativo, children, ...props }) => {
   const campeaoImg = `http://ddragon.leagueoflegends.com/cdn/${process.env.REACT_APP_LAST_PATCH}/img/champion/${invocador.campeao?.alias}.png`
 
   return (
@@ -49,6 +49,7 @@ export const CardRedSide = ({ numero, invocador, ativo, ...props }) => {
             {invocador.rota.label}
           </Text>
         )}
+        {children}
       </Box>
       <Image height={60} width={60} borderRadius={30} img={invocador.campeao ? campeaoImg : icon}></Image>
     </Card>
