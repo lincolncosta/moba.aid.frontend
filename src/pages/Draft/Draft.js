@@ -1,5 +1,6 @@
 import React, { memo, useCallback, useEffect, useReducer, useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import styled from 'styled-components'
 
 import { getSugestao } from 'api/sugestao'
 import { getPredicao } from 'api/predicao'
@@ -42,6 +43,24 @@ const BLUE_PICK_STEPS = [6, 9, 10, 17, 18]
 const RED_PICK_STEPS  = [7, 8, 11, 16, 19]
 
 const ROLE_LABELS = { top: 'Top', jng: 'Jungle', mid: 'Mid', bot: 'Bot', sup: 'Support' }
+
+const ROLE_OPTIONS = [
+  { value: 'top', label: 'Top' },
+  { value: 'jng', label: 'Jungle' },
+  { value: 'mid', label: 'Mid' },
+  { value: 'bot', label: 'Bot' },
+  { value: 'sup', label: 'Support' },
+]
+
+const RoleSelect = styled.select`
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: 1px solid #555;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 14px;
+  cursor: pointer;
+`
 
 function getPhaseLabel(step) {
   if (step < 6)  return 'Ban Phase 1'
@@ -93,17 +112,21 @@ export const Draft = memo(() => {
   const history = useHistory()
   const meuTime = history.location.state?.meuTime
 
-  const [draft, dispatch]                           = useReducer(draftReducer, initialState)
-  const [loading, setLoading]                       = useState(false)
+  const [draft, dispatch]                             = useReducer(draftReducer, initialState)
+  const [loading, setLoading]                         = useState(false)
   const [solicitacaoPendente, setSolicitacaoPendente] = useState(false)
-  const [predicao, setPredicao]                     = useState(null)
+  const [userRoles, setUserRoles]                     = useState([null, null, null, null, null])
+  const [loadingPredicao, setLoadingPredicao]         = useState(false)
+  const [predicao, setPredicao]                       = useState(null)
 
   const { step, blueBans, redBans, bluePicks, redPicks, agTeam } = draft
 
-  const isDraftComplete = step >= 20
-  const currentPhase    = isDraftComplete ? null : DRAFT_SEQUENCE[step].phase
-  const currentTeam     = isDraftComplete ? null : DRAFT_SEQUENCE[step].team
-  const isAITurn        = !isDraftComplete && currentTeam !== meuTime
+  const isDraftComplete  = step >= 20
+  const currentPhase     = isDraftComplete ? null : DRAFT_SEQUENCE[step].phase
+  const currentTeam      = isDraftComplete ? null : DRAFT_SEQUENCE[step].team
+  const isAITurn         = !isDraftComplete && currentTeam !== meuTime
+  const userPicks        = meuTime === 'BLUE' ? bluePicks : redPicks
+  const allRolesAssigned = userRoles.every(r => r !== null)
 
   // Slot index of whichever card should be highlighted as "active" right now
   const currentBlueBanSlot  = !isDraftComplete && currentPhase === 'ban'  && currentTeam === 'BLUE' ? BLUE_BAN_STEPS.indexOf(step)  : -1
@@ -180,15 +203,26 @@ export const Draft = memo(() => {
     }
   }, [step, isDraftComplete, isAITurn, solicitacaoPendente, loading, chamarIA])
 
-  // ── Fetch prediction when draft is complete ───────────────────────────────
-  useEffect(() => {
-    if (!isDraftComplete) return
-    const timeInimigo    = meuTime === 'BLUE' ? 'red' : 'blue'
-    const paramsPredicao = Object.fromEntries(
-      Object.entries(agTeam).map(([role, champion]) => [`${role}_${timeInimigo}`, champion])
-    )
-    getPredicao(paramsPredicao).then(setPredicao)
-  }, [isDraftComplete]) // eslint-disable-line react-hooks/exhaustive-deps
+  // ── Fetch prediction on explicit user request ─────────────────────────────
+  const handlePredict = async () => {
+    setLoadingPredicao(true)
+    try {
+      const userSide = meuTime.toLowerCase()
+      const aiSide   = meuTime === 'BLUE' ? 'red' : 'blue'
+      const paramsPredicao = {
+        ...Object.fromEntries(
+          Object.entries(agTeam).map(([role, champ]) => [`${role}_${aiSide}`, champ])
+        ),
+        ...Object.fromEntries(
+          userRoles.map((role, i) => [`${role}_${userSide}`, userPicks[i].campeao.name])
+        ),
+      }
+      const result = await getPredicao(paramsPredicao)
+      setPredicao(result)
+    } finally {
+      setLoadingPredicao(false)
+    }
+  }
 
   // ─── Render ───────────────────────────────────────────────────────────────
   return (
@@ -275,12 +309,53 @@ export const Draft = memo(() => {
 
       </Box>
 
-      {/* ── Prediction ── */}
-      {isDraftComplete && (
+      {/* ── Role assignment ── */}
+      {isDraftComplete && !predicao && (
+        <Box pt={5} mt={5} display="flex" alignItems="center" flexDirection="column" style={{ borderTop: '1px solid yellow' }}>
+          <Text mb={10} fontWeight={3} fontSize={18} color="textColor">
+            Assign your champions' roles
+          </Text>
+          <Box display="flex" flexDirection="column" style={{ gap: 8, minWidth: 300 }}>
+            {userPicks.map((pick, i) => (
+              <Box key={i} display="flex" alignItems="center" justifyContent="space-between" style={{ gap: 12 }}>
+                <Text color="textColor" fontSize={16} style={{ minWidth: 150 }}>
+                  {pick?.campeao?.name || `Pick ${i + 1}`}
+                </Text>
+                <RoleSelect
+                  value={userRoles[i] || ''}
+                  onChange={(e) => {
+                    const role = e.target.value || null
+                    setUserRoles(prev => { const next = [...prev]; next[i] = role; return next })
+                  }}
+                >
+                  <option value="">Role…</option>
+                  {ROLE_OPTIONS.map(({ value, label }) => (
+                    <option
+                      key={value}
+                      value={value}
+                      disabled={userRoles.includes(value) && userRoles[i] !== value}
+                    >
+                      {label}
+                    </option>
+                  ))}
+                </RoleSelect>
+              </Box>
+            ))}
+          </Box>
+          <Box mt={10}>
+            <Button disabled={!allRolesAssigned || loadingPredicao} onClick={handlePredict}>
+              {loadingPredicao ? 'Predicting…' : 'Predict Winner'}
+            </Button>
+          </Box>
+        </Box>
+      )}
+
+      {/* ── Prediction result ── */}
+      {predicao && (
         <Box pt={5} mt={5} display="flex" alignItems="center" flexDirection="column" style={{ borderTop: '1px solid yellow' }}>
           <Text mb={5} fontWeight={3} fontSize={18} color="textColor">
             <span role="img" aria-label="robot">🤖</span>
-            {' '}{predicao?.predicted_winner} team is the predicted winner
+            {' '}{predicao.predicted_winner} team is the predicted winner
           </Text>
           <Button onClick={() => history.push('/')}>Try again</Button>
         </Box>
