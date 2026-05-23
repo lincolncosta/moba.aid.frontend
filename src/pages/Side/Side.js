@@ -44,7 +44,7 @@ export const Side = memo(() => {
 
   const terminarSide = () => {
     history.push({
-      pathname: '/bans',
+      pathname: '/draft',
       state: { meuTime: time }
     })
   }

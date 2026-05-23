@@ -5,8 +5,7 @@ import { BrowserRouter, Switch, Redirect, Route } from 'react-router-dom'
 import { createTheme } from 'themes/createTheme'
 
 import { Home } from 'pages/Home'
-import { Banimentos } from 'pages/Banimentos'
-import { SelecaoCampeoes } from 'pages/SelecaoCampeoes'
+import { Draft } from 'pages/Draft'
 
 import { Box } from 'components/Box'
 
@@ -44,11 +43,8 @@ export default () => {
             <Route path="/side">
               <Side />
             </Route>
-            <Route path="/bans">
-              <Banimentos />
-            </Route>
-            <Route path="/picks">
-              <SelecaoCampeoes />
+            <Route path="/draft">
+              <Draft />
             </Route>
             <Redirect to="/" />
           </Switch>
