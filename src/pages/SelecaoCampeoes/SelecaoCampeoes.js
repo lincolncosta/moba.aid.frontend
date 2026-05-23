@@ -44,12 +44,7 @@ export const SelecaoCampeoes = memo(() => {
   const [solicitacaoPendente, setSolicitacaoPendente] = useState(false)
   const meuTime = history.location.state.meuTime
   const [params, setParams] = useState({
-    enemyChampions: [],
-    bannedChampions: [],
-    selectedChampions: {},
-    selectedRoles: [],
-    patch: '15.08',
-    objective: 'PICK'
+    selectedChampions: {}
   })
 
   const selecionaCampeao = useCallback((campeaoSelecionado) => {
@@ -88,10 +83,7 @@ export const SelecaoCampeoes = memo(() => {
       selectedChampions: {
         ...prevParams.selectedChampions,
         [role]: nomeCampeao
-      },
-      selectedRoles: prevParams.selectedRoles.includes(role)
-        ? prevParams.selectedRoles
-        : [...prevParams.selectedRoles, role]
+      }
     }))
   }, [])
 
@@ -110,26 +102,26 @@ export const SelecaoCampeoes = memo(() => {
     }
   }, [round, atualizaCampeoesBloqueados])
 
-  const buscaCampeoesSugeridos = useCallback(async (numChampions) => {
-    if (solicitacaoPendente) return // Evita chamadas duplas
+  const buscaCampeoesSugeridos = useCallback(async () => {
+    if (solicitacaoPendente) return
 
-    setSolicitacaoPendente(true) // Marca como "requisição em andamento"
+    setSolicitacaoPendente(true)
 
-    const updatedParams = { ...params } // Fazendo uma cópia para evitar mutações indesejadas
-    updatedParams.numChampions = numChampions
-    updatedParams.bannedChampions = bloqueados.map((champion) => champion.name)
-    setParams(updatedParams)
+    const banned = bloqueados.map((champion) => champion.name)
+    const userTeam = meuTime === 'RED'
+      ? redSide.filter((c) => c.campeao).map((c) => c.campeao.name)
+      : blueSide.filter((c) => c.campeao).map((c) => c.campeao.name)
 
-    if (meuTime === 'RED') {
-      updatedParams.enemyChampions = redSide.filter((c) => c.campeao).map((c) => c.campeao.name)
-    } else {
-      updatedParams.enemyChampions = blueSide.filter((c) => c.campeao).map((c) => c.campeao.name)
-    }
+    const sugestao = await getSugestao({
+      goal: 'pick',
+      agTeam: params.selectedChampions,
+      userTeam,
+      banned
+    })
 
-    const campeaoSugerido = await getSugestao(updatedParams)
-    const campeao = campeoesDataset.find((c) => c.name === campeaoSugerido.suggestions[0].champion)
+    const campeao = campeoesDataset.find((c) => c.name === sugestao.champion)
     selecionaCampeao(campeao)
-    atualizaTimeGA(campeaoSugerido.suggestions[0].champion, campeaoSugerido.suggestions[0].role)
+    atualizaTimeGA(sugestao.champion, sugestao.role)
     confirmaSelecaoCampeao()
   }, [bloqueados, blueSide, redSide, meuTime, solicitacaoPendente, params, selecionaCampeao, confirmaSelecaoCampeao, atualizaTimeGA])
 
@@ -137,7 +129,7 @@ export const SelecaoCampeoes = memo(() => {
     const proximoTime = [0, 3, 4, 7, 8].includes(round) ? 'BLUE' : 'RED'
 
     if (proximoTime !== meuTime && !solicitacaoPendente && !terminouDraft) {
-      buscaCampeoesSugeridos(1)
+      buscaCampeoesSugeridos()
     }
   }, [round, buscaCampeoesSugeridos, meuTime, solicitacaoPendente, terminouDraft])
 
@@ -149,8 +141,6 @@ export const SelecaoCampeoes = memo(() => {
       }
     };
 
-    console.log(params)
-    console.log(meuTime)
     const timeInimigo = meuTime === "BLUE" ? "red" : "blue";
     let paramsPredicao = {};
 

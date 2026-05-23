@@ -19,7 +19,6 @@ export const Banimentos = memo(() => {
   const [bloqueados, setBloqueados] = useState([])
   const [loading, setLoading] = useState(false)
   const time = history.location.state.meuTime
-  const patch = '15.08'
 
   const selecionaCampeao = useCallback((campeaoSelecionado) => {
     setBans((prevBans) => {
@@ -59,20 +58,17 @@ export const Banimentos = memo(() => {
 
     const campeoesBanidos = bans.map((b) => b.campeao).filter(Boolean).map(c => c.name)
 
-    const sugestoes = await getSugestao({
-      patch,
-      objective: 'BAN',
-      numChampions: 1,
-      selectedChampions: [],
-      bannedChampions: campeoesBanidos,
-      enemyChampions: []
+    const sugestao = await getSugestao({
+      goal: 'ban',
+      agTeam: {},
+      userTeam: [],
+      banned: campeoesBanidos
     })
-    const campeaoSugerido = sugestoes.suggestions[0]
-    const campeao = campeoesDataset.find((c) => c.name === campeaoSugerido.champion)
+    const campeao = campeoesDataset.find((c) => c.name === sugestao.champion)
     selecionaCampeao(campeao)
     confirmaSelecaoCampeao()
     setLoading(false)
-  }, [bans, patch, selecionaCampeao, confirmaSelecaoCampeao])
+  }, [bans, selecionaCampeao, confirmaSelecaoCampeao])
 
   useEffect(() => {
     const tecnicoRounds = time === 'BLUE'
