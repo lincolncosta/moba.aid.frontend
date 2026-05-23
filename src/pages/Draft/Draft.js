@@ -44,6 +44,13 @@ const RED_PICK_STEPS  = [7, 8, 11, 16, 19]
 
 const ROLE_LABELS = { top: 'Top', jng: 'Jungle', mid: 'Mid', bot: 'Bot', sup: 'Support' }
 
+// The API uses the DDragon alias as champion name for two champions whose display
+// names differ: "Nunu" → "Nunu & Willump", "Renata" → "Renata Glasc".
+// Try exact display name first, fall back to alias so either format resolves correctly.
+const findChampion = (apiName) =>
+  campeoesDataset.find(c => c.name  === apiName) ||
+  campeoesDataset.find(c => c.alias === apiName)
+
 const ROLE_OPTIONS = [
   { value: 'top', label: 'Top' },
   { value: 'jng', label: 'Jungle' },
@@ -183,8 +190,13 @@ export const Draft = memo(() => {
         banned:   bannedNames,
       })
 
-      const campeao = campeoesDataset.find(c => c.name === sugestao.champion)
-      const rota    = sugestao.role
+      const campeao = findChampion(sugestao.champion)
+      if (!campeao) {
+        console.error(`Champion not found in local dataset: "${sugestao.champion}"`)
+        setSolicitacaoPendente(false)
+        return
+      }
+      const rota = sugestao.role
         ? { value: sugestao.role, label: ROLE_LABELS[sugestao.role] || sugestao.role }
         : null
 
