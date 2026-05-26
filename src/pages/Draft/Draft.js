@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { getSugestao } from 'api/sugestao'
 import { getPredicao } from 'api/predicao'
+import { iniciarSessao } from 'api/sessao'
 import { Box } from 'components/Box'
 import { Text } from 'components/Text'
 import { Button } from 'components/Button'
@@ -120,6 +121,7 @@ export const Draft = memo(() => {
   const meuTime = history.location.state?.meuTime
 
   const [draft, dispatch]                             = useReducer(draftReducer, initialState)
+  const [targetComposition, setTargetComposition]     = useState(null)
   const [loading, setLoading]                         = useState(false)
   const [solicitacaoPendente, setSolicitacaoPendente] = useState(false)
   const [userRoles, setUserRoles]                     = useState([null, null, null, null, null])
@@ -148,6 +150,15 @@ export const Draft = memo(() => {
     ...bluePicks.filter(Boolean).map(p => p.campeao),
     ...redPicks.filter(Boolean).map(p => p.campeao),
   ]
+
+  // ── Call /start once on mount to get the initial targetComposition ───────
+  useEffect(() => {
+    const agSide   = meuTime === 'BLUE' ? 'red' : 'blue'
+    const userSide = meuTime === 'BLUE' ? 'blue' : 'red'
+    iniciarSessao({ agSide, userSide })
+      .then((sessao) => setTargetComposition(sessao.targetComposition))
+      .catch((err) => console.error('Failed to start session:', err))
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Record a step and advance ─────────────────────────────────────────────
   const confirmarPasso = useCallback((champion, rota = null) => {
@@ -184,11 +195,17 @@ export const Draft = memo(() => {
         : bluePicks.filter(Boolean).map(p => p.campeao.name)
 
       const sugestao = await getSugestao({
-        goal:     phase === 'ban' ? 'ban' : 'pick',
+        goal:              phase === 'ban' ? 'ban' : 'pick',
         agTeam,
-        userTeam: userTeamNames,
-        banned:   bannedNames,
+        userTeam:          userTeamNames,
+        banned:            bannedNames,
+        targetComposition,
       })
+
+      // Keep targetComposition fresh for the next /suggest call
+      if (sugestao.targetComposition) {
+        setTargetComposition(sugestao.targetComposition)
+      }
 
       const campeao = findChampion(sugestao.champion)
       if (!campeao) {
@@ -206,14 +223,14 @@ export const Draft = memo(() => {
     } finally {
       setLoading(false)
     }
-  }, [solicitacaoPendente, step, meuTime, blueBans, redBans, bluePicks, redPicks, agTeam, confirmarPasso])
+  }, [solicitacaoPendente, step, meuTime, blueBans, redBans, bluePicks, redPicks, agTeam, targetComposition, confirmarPasso])
 
-  // ── Trigger AI on its turn ────────────────────────────────────────────────
+  // ── Trigger AI on its turn (only after /start has returned) ──────────────
   useEffect(() => {
-    if (!isDraftComplete && isAITurn && !solicitacaoPendente && !loading) {
+    if (targetComposition && !isDraftComplete && isAITurn && !solicitacaoPendente && !loading) {
       chamarIA()
     }
-  }, [step, isDraftComplete, isAITurn, solicitacaoPendente, loading, chamarIA])
+  }, [step, targetComposition, isDraftComplete, isAITurn, solicitacaoPendente, loading, chamarIA])
 
   // ── Fetch prediction on explicit user request ─────────────────────────────
   const handlePredict = async () => {
@@ -237,6 +254,14 @@ export const Draft = memo(() => {
   }
 
   // ─── Render ───────────────────────────────────────────────────────────────
+  if (!targetComposition) {
+    return (
+      <Box display="flex" flex={1} alignItems="center" justifyContent="center" minHeight="100vh">
+        <Text fontWeight={3} fontSize={20} color="textColor">Preparing draft…</Text>
+      </Box>
+    )
+  }
+
   return (
     <Box display="flex" flex={1} p={15} flexDirection="column">
 
