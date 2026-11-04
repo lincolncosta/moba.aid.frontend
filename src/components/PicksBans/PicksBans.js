@@ -17,6 +17,9 @@ export const PicksBans = ({
   campeaoSelecionado: campeaoSelecionadoProp,
   confirmarAutomaticamente,
   loading,
+  multiSelect = false,
+  selectedChampions = [],
+  onToggleCampeao,
   ...props
 }) => {
 
@@ -32,20 +35,29 @@ export const PicksBans = ({
   const campeoesOrdenados = campeoes.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0))
 
   const handleSelectCampeao = (campeao) => {
+    if (loading) return
 
-    if (loading) { return }
+    if (bloqueados.find((c) => c.id === campeao.id)) return
 
-    if (bloqueados.find((c) => c.id === campeao.id)) {
+    if (multiSelect) {
+      onToggleCampeao?.(campeao)
       return
     }
 
-    onSelectCampeao(campeao)
+    onSelectCampeao?.(campeao)
     setCampeaoSelecionadoLocal(campeao)
   }
 
   const handleConfirmarCampeao = () => {
     onConfirm(campeaoSelecionado)
     setCampeaoSelecionadoLocal(null)
+  }
+
+  const isSelected = (campeao) => {
+    if (multiSelect)
+      return selectedChampions.some((c) => c.id === campeao.id)
+
+    return campeao.id === campeaoSelecionado?.id
   }
 
   return (
@@ -67,14 +79,14 @@ export const PicksBans = ({
               nome={campeao.name}
               alias={campeao.alias}
               bloqueado={loading || bloqueados.find((c) => c.id === campeao.id)}
-              selecionado={campeao.id === campeaoSelecionado?.id}
+              selecionado={isSelected(campeao)}
               onClick={() => handleSelectCampeao(campeao)}
             />
           )
         })}
       </Box>
       <Box height={60} display="flex" justifyContent="center" alignItems="center">
-        {selecaoAtiva && (
+        {selecaoAtiva && !multiSelect && (
           <Button
             height={35}
             disabled={!campeaoSelecionado || loading}

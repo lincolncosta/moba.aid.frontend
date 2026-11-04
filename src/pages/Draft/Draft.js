@@ -12,6 +12,7 @@ import { PicksBans } from 'components/PicksBans'
 import { CardBlueSide } from 'components/CardBlueSide'
 import { CardRedSide } from 'components/CardRedSide'
 import { CampeaoBanido } from 'components/CampeaoBanido'
+import { Campeao } from 'components/Campeao'
 import campeoesDataset from 'database/champions.json'
 
 // Full 20-step draft: Ban Phase 1 (6) → Pick Phase 1 (6) → Ban Phase 2 (4) → Pick Phase 2 (4)
@@ -70,7 +71,8 @@ const RoleSelect = styled.select`
   cursor: pointer;
 `
 
-function getPhaseLabel(step) {
+function getPhaseLabel(step, isFearlessSelecting) {
+  if (isFearlessSelecting) return 'Fearless'
   if (step < 6)  return 'Ban Phase 1'
   if (step < 12) return 'Pick Phase 1'
   if (step < 16) return 'Ban Phase 2'
@@ -127,29 +129,36 @@ export const Draft = memo(() => {
   const [userRoles, setUserRoles]                     = useState([null, null, null, null, null])
   const [loadingPredicao, setLoadingPredicao]         = useState(false)
   const [predicao, setPredicao]                       = useState(null)
+  const [fearlessPhase, setFearlessPhase]             = useState('selecting') // 'selecting' | 'done'
+  const [fearlessChampions, setFearlessChampions]     = useState([])
+  const [fearlessDraft, setFearlessDraft]             = useState([]) // pending selection while selecting
 
   const { step, blueBans, redBans, bluePicks, redPicks, agTeam } = draft
 
-  const isDraftComplete  = step >= 20
-  const currentPhase     = isDraftComplete ? null : DRAFT_SEQUENCE[step].phase
-  const currentTeam      = isDraftComplete ? null : DRAFT_SEQUENCE[step].team
-  const isAITurn         = !isDraftComplete && currentTeam !== meuTime
+  const isFearlessSelecting = fearlessPhase === 'selecting'
+  const isDraftComplete  = !isFearlessSelecting && step >= 20
+  const currentPhase     = isFearlessSelecting || isDraftComplete ? null : DRAFT_SEQUENCE[step].phase
+  const currentTeam      = isFearlessSelecting || isDraftComplete ? null : DRAFT_SEQUENCE[step].team
+  const isAITurn         = !isFearlessSelecting && !isDraftComplete && currentTeam !== meuTime
   const userPicks        = meuTime === 'BLUE' ? bluePicks : redPicks
   const allRolesAssigned = userRoles.every(r => r !== null)
 
   // Slot index of whichever card should be highlighted as "active" right now
-  const currentBlueBanSlot  = !isDraftComplete && currentPhase === 'ban'  && currentTeam === 'BLUE' ? BLUE_BAN_STEPS.indexOf(step)  : -1
-  const currentRedBanSlot   = !isDraftComplete && currentPhase === 'ban'  && currentTeam === 'RED'  ? RED_BAN_STEPS.indexOf(step)   : -1
-  const currentBluePickSlot = !isDraftComplete && currentPhase === 'pick' && currentTeam === 'BLUE' ? BLUE_PICK_STEPS.indexOf(step) : -1
-  const currentRedPickSlot  = !isDraftComplete && currentPhase === 'pick' && currentTeam === 'RED'  ? RED_PICK_STEPS.indexOf(step)  : -1
+  const currentBlueBanSlot  = !isFearlessSelecting && !isDraftComplete && currentPhase === 'ban'  && currentTeam === 'BLUE' ? BLUE_BAN_STEPS.indexOf(step)  : -1
+  const currentRedBanSlot   = !isFearlessSelecting && !isDraftComplete && currentPhase === 'ban'  && currentTeam === 'RED'  ? RED_BAN_STEPS.indexOf(step)   : -1
+  const currentBluePickSlot = !isFearlessSelecting && !isDraftComplete && currentPhase === 'pick' && currentTeam === 'BLUE' ? BLUE_PICK_STEPS.indexOf(step) : -1
+  const currentRedPickSlot  = !isFearlessSelecting && !isDraftComplete && currentPhase === 'pick' && currentTeam === 'RED'  ? RED_PICK_STEPS.indexOf(step) : -1
 
-  // Champions the picker must block out (already banned or picked)
+  // Champions the picker must block out (already fearless, banned or picked)
   const bloqueados = [
+    ...fearlessChampions,
     ...blueBans.filter(Boolean),
     ...redBans.filter(Boolean),
     ...bluePicks.filter(Boolean).map(p => p.campeao),
     ...redPicks.filter(Boolean).map(p => p.campeao),
   ]
+
+  const fearlessDisplay = isFearlessSelecting ? fearlessDraft : fearlessChampions
 
   // ── Call /start once on mount to get the initial targetComposition ───────
   useEffect(() => {
@@ -160,9 +169,28 @@ export const Draft = memo(() => {
       .catch((err) => console.error('Failed to start session:', err))
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+  const handleToggleFearless = useCallback((campeao) => {
+    setFearlessDraft((prev) => {
+      const exists = prev.find((c) => c.id === campeao.id)
+      if (exists) return prev.filter((c) => c.id !== campeao.id)
+      return [...prev, campeao]
+    })
+  }, [])
+
+  const handleConfirmFearless = useCallback(() => {
+    setFearlessChampions(fearlessDraft)
+    setFearlessPhase('done')
+  }, [fearlessDraft])
+
+  const handleSkipFearless = useCallback(() => {
+    setFearlessDraft([])
+    setFearlessChampions([])
+    setFearlessPhase('done')
+  }, [])
+
   // ── Record a step and advance ─────────────────────────────────────────────
   const confirmarPasso = useCallback((champion, rota = null) => {
-    if (step >= 20) return
+    if (isFearlessSelecting || step >= 20) return
     const { phase, team } = DRAFT_SEQUENCE[step]
     const isBlue = team === 'BLUE'
     const isAI   = team !== meuTime
@@ -179,11 +207,11 @@ export const Draft = memo(() => {
       })
     }
     setSolicitacaoPendente(false)
-  }, [step, meuTime])
+  }, [step, meuTime, isFearlessSelecting])
 
   // ── AI turn: call /suggest and confirm result ─────────────────────────────
   const chamarIA = useCallback(async () => {
-    if (solicitacaoPendente) return
+    if (solicitacaoPendente || isFearlessSelecting) return
     setSolicitacaoPendente(true)
     setLoading(true)
 
@@ -199,6 +227,7 @@ export const Draft = memo(() => {
         agTeam,
         userTeam:          userTeamNames,
         banned:            bannedNames,
+        fearless:          fearlessChampions.map(c => c.name),
         targetComposition,
       })
 
@@ -223,14 +252,14 @@ export const Draft = memo(() => {
     } finally {
       setLoading(false)
     }
-  }, [solicitacaoPendente, step, meuTime, blueBans, redBans, bluePicks, redPicks, agTeam, targetComposition, confirmarPasso])
+  }, [solicitacaoPendente, isFearlessSelecting, step, meuTime, blueBans, redBans, bluePicks, redPicks, agTeam, fearlessChampions, targetComposition, confirmarPasso])
 
-  // ── Trigger AI on its turn (only after /start has returned) ──────────────
+  // ── Trigger AI on its turn (only after Fearless done and /start has returned) ──
   useEffect(() => {
-    if (targetComposition && !isDraftComplete && isAITurn && !solicitacaoPendente && !loading) {
+    if (!isFearlessSelecting && targetComposition && !isDraftComplete && isAITurn && !solicitacaoPendente && !loading) {
       chamarIA()
     }
-  }, [step, targetComposition, isDraftComplete, isAITurn, solicitacaoPendente, loading, chamarIA])
+  }, [step, isFearlessSelecting, targetComposition, isDraftComplete, isAITurn, solicitacaoPendente, loading, chamarIA])
 
   // ── Fetch prediction on explicit user request ─────────────────────────────
   const handlePredict = async () => {
@@ -266,13 +295,20 @@ export const Draft = memo(() => {
     <Box display="flex" flex={1} p={15} flexDirection="column">
 
       {/* Phase / turn banner */}
-      <Box display="flex" justifyContent="center" alignItems="baseline" mb={5}>
-        <Text fontWeight={3} fontSize={24} color="textColor">
-          {getPhaseLabel(step)}
-        </Text>
-        {!isDraftComplete && (
-          <Text fontSize={16} color="textColor" style={{ marginLeft: 12, opacity: 0.7 }}>
-            — {currentTeam === meuTime ? 'Your turn' : 'AI thinking…'}
+      <Box display="flex" justifyContent="center" alignItems="baseline" mb={5} flexDirection="column" style={{ textAlign: 'center' }}>
+        <Box display="flex" justifyContent="center" alignItems="baseline" width="100%">
+          <Text fontWeight={3} fontSize={24} color="textColor">
+            {getPhaseLabel(step, isFearlessSelecting)}
+          </Text>
+          {!isFearlessSelecting && !isDraftComplete && (
+            <Text fontSize={16} color="textColor" style={{ marginLeft: 12, opacity: 0.7 }}>
+              {currentTeam === meuTime ? 'Your turn' : 'AI thinking…'}
+            </Text>
+          )}
+        </Box>
+        {isFearlessSelecting && (
+          <Text fontSize={14} color="textColor" style={{ marginTop: 6, opacity: 0.75 }}>
+            Mark champions already picked in this series. Skip if this is the first game.
           </Text>
         )}
       </Box>
@@ -326,12 +362,50 @@ export const Draft = memo(() => {
         {/* ── Center: champion picker + ban rows ── */}
         <Box display="flex" flex={2} px={15} flexDirection="column">
           <PicksBans
-            bloqueados={bloqueados}
+            bloqueados={isFearlessSelecting ? [] : bloqueados}
             loading={loading}
-            selecaoAtiva={!isDraftComplete && !isAITurn}
+            selecaoAtiva={!isFearlessSelecting && !isDraftComplete && !isAITurn}
+            multiSelect={isFearlessSelecting}
+            selectedChampions={fearlessDraft}
+            onToggleCampeao={handleToggleFearless}
             onSelectCampeao={() => {}}
             onConfirm={(champion) => confirmarPasso(champion)}
           />
+
+          {isFearlessSelecting && (
+            <Box pt={3} display="flex" justifyContent="center" alignItems="center" style={{ gap: 12 }}>
+              <Button height={35} onClick={handleSkipFearless}>
+                Skip
+              </Button>
+              <Button height={35} onClick={handleConfirmFearless}>
+                Confirm Fearless
+              </Button>
+            </Box>
+          )}
+
+          {(isFearlessSelecting || fearlessChampions.length > 0) && (
+            <Box pt={5} display="flex" flexDirection="column" alignItems="center" style={{ borderTop: '1px solid #c9a227' }}>
+              <Text mb={5} fontWeight={3} fontSize={14} color="textColor">Fearless</Text>
+              <Box display="flex" flexWrap="wrap" justifyContent="center" width="100%">
+                {fearlessDisplay.length === 0 ? (
+                  <Text fontSize={12} color="textColor" style={{ opacity: 0.6 }}>
+                    None selected
+                  </Text>
+                ) : (
+                  fearlessDisplay.map((campeao) => (
+                    <Campeao
+                      key={campeao.id}
+                      m={5}
+                      nome={campeao.name}
+                      alias={campeao.alias}
+                      fontSizeNome={10}
+                      selecionado={isFearlessSelecting}
+                    />
+                  ))
+                )}
+              </Box>
+            </Box>
+          )}
 
           <Box pt={5} display="flex" flexDirection="column" alignItems="center" style={{ borderTop: '1px solid yellow' }}>
             <Text mb={5} fontWeight={3} fontSize={14} color="textColor">Bans</Text>
