@@ -162,16 +162,16 @@
     "squarePortraitPath":"Diana.png"
   },
   {
-    "id":"119",
-    "name":"Draven",
-    "alias":"Draven",
-    "squarePortraitPath":"Draven.png"
-  },
-  {
     "id":"36",
     "name":"Dr. Mundo",
     "alias":"DrMundo",
     "squarePortraitPath":"DrMundo.png"
+  },
+  {
+    "id":"119",
+    "name":"Draven",
+    "alias":"Draven",
+    "squarePortraitPath":"Draven.png"
   },
   {
     "id":"245",
@@ -330,6 +330,12 @@
     "squarePortraitPath":"Jinx.png"
   },
   {
+    "id":"897",
+    "name":"K'Sante",
+    "alias":"KSante",
+    "squarePortraitPath":"KSante.png"
+  },
+  {
     "id":"145",
     "name":"Kai'Sa",
     "alias":"Kaisa",
@@ -406,12 +412,6 @@
     "name":"Kog'Maw",
     "alias":"KogMaw",
     "squarePortraitPath":"KogMaw.png"
-  },
-  {
-    "id":"897",
-    "name":"K'Sante",
-    "alias":"KSante",
-    "squarePortraitPath":"KSante.png"
   },
   {
     "id":"7",
@@ -502,12 +502,6 @@
     "name":"Miss Fortune",
     "alias":"MissFortune",
     "squarePortraitPath":"MissFortune.png"
-  },
-  {
-    "id":"62",
-    "name":"Wukong",
-    "alias":"MonkeyKing",
-    "squarePortraitPath":"MonkeyKing.png"
   },
   {
     "id":"82",
@@ -936,6 +930,12 @@
     "squarePortraitPath":"Warwick.png"
   },
   {
+    "id":"62",
+    "name":"Wukong",
+    "alias":"MonkeyKing",
+    "squarePortraitPath":"MonkeyKing.png"
+  },
+  {
     "id":"498",
     "name":"Xayah",
     "alias":"Xayah",
@@ -972,10 +972,22 @@
     "squarePortraitPath":"Yorick.png"
   },
   {
+    "id":"804",
+    "name":"Yunara",
+    "alias":"Yunara",
+    "squarePortraitPath":"Yunara.png"
+  },
+  {
     "id":"350",
     "name":"Yuumi",
     "alias":"Yuumi",
     "squarePortraitPath":"Yuumi.png"
+  },
+  {
+    "id":"904",
+    "name":"Zaahen",
+    "alias":"Zaahen",
+    "squarePortraitPath":"Zaahen.png"
   },
   {
     "id":"154",

@@ -41,11 +41,12 @@ const RadioLabel = styled.label`
 export const Side = memo(() => {
   const history = useHistory()
   const [time, setTime] = useState('')
+  const fearless = history.location.state?.fearless || []
 
   const terminarSide = () => {
     history.push({
       pathname: '/draft',
-      state: { meuTime: time }
+      state: { meuTime: time, fearless }
     })
   }
 

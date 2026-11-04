@@ -31,7 +31,7 @@ const Card = styled(Box)`
 `
 
 export const CardRedSide = ({ numero, invocador, ativo, children, ...props }) => {
-  const campeaoImg = `http://ddragon.leagueoflegends.com/cdn/${process.env.REACT_APP_LAST_PATCH}/img/champion/${invocador.campeao?.alias}.png`
+  const campeaoImg = `https://ddragon.leagueoflegends.com/cdn/${process.env.REACT_APP_LAST_PATCH}/img/champion/${invocador.campeao?.alias}.png`
 
   return (
     <Card py={10} pl={10} ativo={ativo} {...props}>

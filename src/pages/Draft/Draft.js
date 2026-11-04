@@ -71,8 +71,12 @@ const RoleSelect = styled.select`
   cursor: pointer;
 `
 
-function getPhaseLabel(step, isFearlessSelecting) {
-  if (isFearlessSelecting) return 'Fearless'
+const CONFIDENCE_LABELS = { low: 'Low', medium: 'Medium', high: 'High' }
+
+const mensagemDeErro = (err) =>
+  err?.response?.data?.error || err?.message || 'Unknown error'
+
+function getPhaseLabel(step) {
   if (step < 6)  return 'Ban Phase 1'
   if (step < 12) return 'Pick Phase 1'
   if (step < 16) return 'Ban Phase 2'
@@ -121,6 +125,8 @@ function draftReducer(state, action) {
 export const Draft = memo(() => {
   const history = useHistory()
   const meuTime = history.location.state?.meuTime
+  // Campeões marcados na etapa Fearless (antes da escolha do lado)
+  const fearlessChampions = history.location.state?.fearless || []
 
   const [draft, dispatch]                             = useReducer(draftReducer, initialState)
   const [targetComposition, setTargetComposition]     = useState(null)
@@ -129,25 +135,23 @@ export const Draft = memo(() => {
   const [userRoles, setUserRoles]                     = useState([null, null, null, null, null])
   const [loadingPredicao, setLoadingPredicao]         = useState(false)
   const [predicao, setPredicao]                       = useState(null)
-  const [fearlessPhase, setFearlessPhase]             = useState('selecting') // 'selecting' | 'done'
-  const [fearlessChampions, setFearlessChampions]     = useState([])
-  const [fearlessDraft, setFearlessDraft]             = useState([]) // pending selection while selecting
+  const [erro, setErro]                               = useState(null)
+  const [tentativaInicio, setTentativaInicio]         = useState(0)
 
   const { step, blueBans, redBans, bluePicks, redPicks, agTeam } = draft
 
-  const isFearlessSelecting = fearlessPhase === 'selecting'
-  const isDraftComplete  = !isFearlessSelecting && step >= 20
-  const currentPhase     = isFearlessSelecting || isDraftComplete ? null : DRAFT_SEQUENCE[step].phase
-  const currentTeam      = isFearlessSelecting || isDraftComplete ? null : DRAFT_SEQUENCE[step].team
-  const isAITurn         = !isFearlessSelecting && !isDraftComplete && currentTeam !== meuTime
+  const isDraftComplete  = step >= 20
+  const currentPhase     = isDraftComplete ? null : DRAFT_SEQUENCE[step].phase
+  const currentTeam      = isDraftComplete ? null : DRAFT_SEQUENCE[step].team
+  const isAITurn         = !isDraftComplete && currentTeam !== meuTime
   const userPicks        = meuTime === 'BLUE' ? bluePicks : redPicks
   const allRolesAssigned = userRoles.every(r => r !== null)
 
   // Slot index of whichever card should be highlighted as "active" right now
-  const currentBlueBanSlot  = !isFearlessSelecting && !isDraftComplete && currentPhase === 'ban'  && currentTeam === 'BLUE' ? BLUE_BAN_STEPS.indexOf(step)  : -1
-  const currentRedBanSlot   = !isFearlessSelecting && !isDraftComplete && currentPhase === 'ban'  && currentTeam === 'RED'  ? RED_BAN_STEPS.indexOf(step)   : -1
-  const currentBluePickSlot = !isFearlessSelecting && !isDraftComplete && currentPhase === 'pick' && currentTeam === 'BLUE' ? BLUE_PICK_STEPS.indexOf(step) : -1
-  const currentRedPickSlot  = !isFearlessSelecting && !isDraftComplete && currentPhase === 'pick' && currentTeam === 'RED'  ? RED_PICK_STEPS.indexOf(step) : -1
+  const currentBlueBanSlot  = !isDraftComplete && currentPhase === 'ban'  && currentTeam === 'BLUE' ? BLUE_BAN_STEPS.indexOf(step)  : -1
+  const currentRedBanSlot   = !isDraftComplete && currentPhase === 'ban'  && currentTeam === 'RED'  ? RED_BAN_STEPS.indexOf(step)   : -1
+  const currentBluePickSlot = !isDraftComplete && currentPhase === 'pick' && currentTeam === 'BLUE' ? BLUE_PICK_STEPS.indexOf(step) : -1
+  const currentRedPickSlot  = !isDraftComplete && currentPhase === 'pick' && currentTeam === 'RED'  ? RED_PICK_STEPS.indexOf(step) : -1
 
   // Champions the picker must block out (already fearless, banned or picked)
   const bloqueados = [
@@ -158,39 +162,25 @@ export const Draft = memo(() => {
     ...redPicks.filter(Boolean).map(p => p.campeao),
   ]
 
-  const fearlessDisplay = isFearlessSelecting ? fearlessDraft : fearlessChampions
-
-  // ── Call /start once on mount to get the initial targetComposition ───────
+  // Sem lado escolhido (acesso direto a /draft): volta ao início
   useEffect(() => {
+    if (!meuTime) history.replace('/')
+  }, [meuTime, history])
+
+  // ── Call /start to get the initial targetComposition (Fearless incluído) ──
+  useEffect(() => {
+    if (!meuTime) return
     const agSide   = meuTime === 'BLUE' ? 'red' : 'blue'
     const userSide = meuTime === 'BLUE' ? 'blue' : 'red'
-    iniciarSessao({ agSide, userSide })
+    setErro(null)
+    iniciarSessao({ agSide, userSide, fearless: fearlessChampions.map(c => c.name) })
       .then((sessao) => setTargetComposition(sessao.targetComposition))
-      .catch((err) => console.error('Failed to start session:', err))
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const handleToggleFearless = useCallback((campeao) => {
-    setFearlessDraft((prev) => {
-      const exists = prev.find((c) => c.id === campeao.id)
-      if (exists) return prev.filter((c) => c.id !== campeao.id)
-      return [...prev, campeao]
-    })
-  }, [])
-
-  const handleConfirmFearless = useCallback(() => {
-    setFearlessChampions(fearlessDraft)
-    setFearlessPhase('done')
-  }, [fearlessDraft])
-
-  const handleSkipFearless = useCallback(() => {
-    setFearlessDraft([])
-    setFearlessChampions([])
-    setFearlessPhase('done')
-  }, [])
+      .catch((err) => setErro(`Could not start the draft: ${mensagemDeErro(err)}`))
+  }, [tentativaInicio]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Record a step and advance ─────────────────────────────────────────────
   const confirmarPasso = useCallback((champion, rota = null) => {
-    if (isFearlessSelecting || step >= 20) return
+    if (step >= 20) return
     const { phase, team } = DRAFT_SEQUENCE[step]
     const isBlue = team === 'BLUE'
     const isAI   = team !== meuTime
@@ -207,11 +197,11 @@ export const Draft = memo(() => {
       })
     }
     setSolicitacaoPendente(false)
-  }, [step, meuTime, isFearlessSelecting])
+  }, [step, meuTime])
 
   // ── AI turn: call /suggest and confirm result ─────────────────────────────
   const chamarIA = useCallback(async () => {
-    if (solicitacaoPendente || isFearlessSelecting) return
+    if (solicitacaoPendente || erro) return
     setSolicitacaoPendente(true)
     setLoading(true)
 
@@ -238,7 +228,7 @@ export const Draft = memo(() => {
 
       const campeao = findChampion(sugestao.champion)
       if (!campeao) {
-        console.error(`Champion not found in local dataset: "${sugestao.champion}"`)
+        setErro(`The AI chose "${sugestao.champion}", which is missing from the local champion list.`)
         setSolicitacaoPendente(false)
         return
       }
@@ -247,23 +237,30 @@ export const Draft = memo(() => {
         : null
 
       confirmarPasso(campeao, rota)
-    } catch {
+    } catch (err) {
+      setErro(`The AI could not make its move: ${mensagemDeErro(err)}`)
       setSolicitacaoPendente(false)
     } finally {
       setLoading(false)
     }
-  }, [solicitacaoPendente, isFearlessSelecting, step, meuTime, blueBans, redBans, bluePicks, redPicks, agTeam, fearlessChampions, targetComposition, confirmarPasso])
+  }, [solicitacaoPendente, erro, step, meuTime, blueBans, redBans, bluePicks, redPicks, agTeam, fearlessChampions, targetComposition, confirmarPasso])
 
-  // ── Trigger AI on its turn (only after Fearless done and /start has returned) ──
+  // ── Trigger AI on its turn (after /start has returned, while there is no error) ──
   useEffect(() => {
-    if (!isFearlessSelecting && targetComposition && !isDraftComplete && isAITurn && !solicitacaoPendente && !loading) {
+    if (targetComposition && !erro && !isDraftComplete && isAITurn && !solicitacaoPendente && !loading) {
       chamarIA()
     }
-  }, [step, isFearlessSelecting, targetComposition, isDraftComplete, isAITurn, solicitacaoPendente, loading, chamarIA])
+  }, [step, targetComposition, erro, isDraftComplete, isAITurn, solicitacaoPendente, loading, chamarIA])
+
+  const tentarNovamente = () => {
+    setErro(null)
+    if (!targetComposition) setTentativaInicio((n) => n + 1)
+  }
 
   // ── Fetch prediction on explicit user request ─────────────────────────────
   const handlePredict = async () => {
     setLoadingPredicao(true)
+    setErro(null)
     try {
       const userSide = meuTime.toLowerCase()
       const aiSide   = meuTime === 'BLUE' ? 'red' : 'blue'
@@ -277,16 +274,28 @@ export const Draft = memo(() => {
       }
       const result = await getPredicao(paramsPredicao)
       setPredicao(result)
+    } catch (err) {
+      setErro(`Could not predict the winner: ${mensagemDeErro(err)}`)
     } finally {
       setLoadingPredicao(false)
     }
   }
 
   // ─── Render ───────────────────────────────────────────────────────────────
+  const avisoDeErro = erro && (
+    <Box display="flex" flexDirection="column" alignItems="center" my={5} p={5}
+      style={{ backgroundColor: 'rgba(160, 0, 0, 0.8)', borderRadius: 8 }}>
+      <Text fontSize={16} color="textColor" mb={3}>{erro}</Text>
+      <Button height={35} onClick={tentarNovamente}>Try again</Button>
+    </Box>
+  )
+
   if (!targetComposition) {
     return (
-      <Box display="flex" flex={1} alignItems="center" justifyContent="center" minHeight="100vh">
-        <Text fontWeight={3} fontSize={20} color="textColor">Preparing draft…</Text>
+      <Box display="flex" flex={1} flexDirection="column" alignItems="center" justifyContent="center" minHeight="100vh">
+        {erro ? avisoDeErro : (
+          <Text fontWeight={3} fontSize={20} color="textColor">Preparing draft…</Text>
+        )}
       </Box>
     )
   }
@@ -298,20 +307,17 @@ export const Draft = memo(() => {
       <Box display="flex" justifyContent="center" alignItems="baseline" mb={5} flexDirection="column" style={{ textAlign: 'center' }}>
         <Box display="flex" justifyContent="center" alignItems="baseline" width="100%">
           <Text fontWeight={3} fontSize={24} color="textColor">
-            {getPhaseLabel(step, isFearlessSelecting)}
+            {getPhaseLabel(step)}
           </Text>
-          {!isFearlessSelecting && !isDraftComplete && (
+          {!isDraftComplete && (
             <Text fontSize={16} color="textColor" style={{ marginLeft: 12, opacity: 0.7 }}>
               {currentTeam === meuTime ? 'Your turn' : 'AI thinking…'}
             </Text>
           )}
         </Box>
-        {isFearlessSelecting && (
-          <Text fontSize={14} color="textColor" style={{ marginTop: 6, opacity: 0.75 }}>
-            Mark champions already picked in this series. Skip if this is the first game.
-          </Text>
-        )}
       </Box>
+
+      {avisoDeErro}
 
       <Box display="flex" flex={1}>
 
@@ -362,47 +368,20 @@ export const Draft = memo(() => {
         {/* ── Center: champion picker + ban rows ── */}
         <Box display="flex" flex={2} px={15} flexDirection="column">
           <PicksBans
-            bloqueados={isFearlessSelecting ? [] : bloqueados}
+            bloqueados={bloqueados}
             loading={loading}
-            selecaoAtiva={!isFearlessSelecting && !isDraftComplete && !isAITurn}
-            multiSelect={isFearlessSelecting}
-            selectedChampions={fearlessDraft}
-            onToggleCampeao={handleToggleFearless}
+            selecaoAtiva={!isDraftComplete && !isAITurn}
             onSelectCampeao={() => {}}
             onConfirm={(champion) => confirmarPasso(champion)}
           />
 
-          {isFearlessSelecting && (
-            <Box pt={3} display="flex" justifyContent="center" alignItems="center" style={{ gap: 12 }}>
-              <Button height={35} onClick={handleSkipFearless}>
-                Skip
-              </Button>
-              <Button height={35} onClick={handleConfirmFearless}>
-                Confirm Fearless
-              </Button>
-            </Box>
-          )}
-
-          {(isFearlessSelecting || fearlessChampions.length > 0) && (
+          {fearlessChampions.length > 0 && (
             <Box pt={5} display="flex" flexDirection="column" alignItems="center" style={{ borderTop: '1px solid #c9a227' }}>
               <Text mb={5} fontWeight={3} fontSize={14} color="textColor">Fearless</Text>
               <Box display="flex" flexWrap="wrap" justifyContent="center" width="100%">
-                {fearlessDisplay.length === 0 ? (
-                  <Text fontSize={12} color="textColor" style={{ opacity: 0.6 }}>
-                    None selected
-                  </Text>
-                ) : (
-                  fearlessDisplay.map((campeao) => (
-                    <Campeao
-                      key={campeao.id}
-                      m={5}
-                      nome={campeao.name}
-                      alias={campeao.alias}
-                      fontSizeNome={10}
-                      selecionado={isFearlessSelecting}
-                    />
-                  ))
-                )}
+                {fearlessChampions.map((campeao) => (
+                  <Campeao key={campeao.id} m={5} nome={campeao.name} alias={campeao.alias} fontSizeNome={10} />
+                ))}
               </Box>
             </Box>
           )}
@@ -473,10 +452,22 @@ export const Draft = memo(() => {
       {/* ── Prediction result ── */}
       {predicao && (
         <Box pt={5} mt={5} display="flex" alignItems="center" flexDirection="column" style={{ borderTop: '1px solid yellow' }}>
-          <Text mb={5} fontWeight={3} fontSize={18} color="textColor">
+          <Text mb={3} fontWeight={3} fontSize={18} color="textColor">
             <span role="img" aria-label="robot">🤖</span>
             {' '}{predicao.predicted_winner} team is the predicted winner
+            {' '}({Math.round(predicao.win_probability * 100)}%)
           </Text>
+          {predicao.confidence && (
+            <Text mb={3} fontSize={14} color="textColor" style={{ opacity: 0.8 }}>
+              Confidence: {CONFIDENCE_LABELS[predicao.confidence] || predicao.confidence}
+            </Text>
+          )}
+          {(predicao.key_factors || []).map((f) => (
+            <Text key={f.factor} fontSize={14} color="textColor" style={{ opacity: 0.8 }}>
+              • {f.label}
+            </Text>
+          ))}
+          <Box mt={5} />
           <Button onClick={() => history.push('/')}>Try again</Button>
         </Box>
       )}

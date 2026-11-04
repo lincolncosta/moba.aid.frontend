@@ -23,7 +23,7 @@ export const Home = memo(() => {
             Questions and suggestions should be sent to <a href='mailto:costa@cos.ufrj.br'>costa@cos.ufrj.br</a>.
           </Text>
           <Box display="flex" justifyContent="center" mt={10}>
-            <Button onClick={() => history.push('/side')}>Start</Button>
+            <Button onClick={() => history.push('/fearless')}>Start</Button>
           </Box>
         </Box>
       </Box>

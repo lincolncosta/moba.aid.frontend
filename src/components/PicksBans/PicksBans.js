@@ -9,10 +9,7 @@ import campeoes from '../../database/champions.json'
 export const PicksBans = ({
   bloqueados = [],
   selecaoAtiva,
-  selecaoRotas,
-  selecaoRotasAtiva,
   onSelectCampeao,
-  onSelectRota,
   onConfirm,
   campeaoSelecionado: campeaoSelecionadoProp,
   confirmarAutomaticamente,
@@ -40,11 +37,11 @@ export const PicksBans = ({
     if (bloqueados.find((c) => c.id === campeao.id)) return
 
     if (multiSelect) {
-      onToggleCampeao?.(campeao)
+      if (onToggleCampeao) onToggleCampeao(campeao)
       return
     }
 
-    onSelectCampeao?.(campeao)
+    if (onSelectCampeao) onSelectCampeao(campeao)
     setCampeaoSelecionadoLocal(campeao)
   }
 
