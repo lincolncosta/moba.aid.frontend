@@ -444,6 +444,12 @@
     "squarePortraitPath":"Lissandra.png"
   },
   {
+    "id":"805",
+    "name":"Locke",
+    "alias":"Locke",
+    "squarePortraitPath":"Locke.png"
+  },
+  {
     "id":"236",
     "name":"Lucian",
     "alias":"Lucian",
