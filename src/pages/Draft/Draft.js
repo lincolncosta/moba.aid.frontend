@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { getSugestao } from 'api/sugestao'
 import { getPredicao } from 'api/predicao'
-import { iniciarSessao } from 'api/sessao'
+import { getJogadaAdversario } from 'api/adversario'
 import { Box } from 'components/Box'
 import { Text } from 'components/Text'
 import { Button } from 'components/Button'
@@ -13,6 +13,10 @@ import { CardBlueSide } from 'components/CardBlueSide'
 import { CardRedSide } from 'components/CardRedSide'
 import { CampeaoBanido } from 'components/CampeaoBanido'
 import { Campeao } from 'components/Campeao'
+import { Analysis } from 'components/Analysis'
+import { Advisor } from 'components/Advisor'
+import { Scout } from 'components/Scout'
+import { SmallButton } from 'components/Panel'
 import campeoesDataset from 'database/champions.json'
 
 // Full 20-step draft: Ban Phase 1 (6) → Pick Phase 1 (6) → Ban Phase 2 (4) → Pick Phase 2 (4)
@@ -71,8 +75,6 @@ const RoleSelect = styled.select`
   cursor: pointer;
 `
 
-const CONFIDENCE_LABELS = { low: 'Low', medium: 'Medium', high: 'High' }
-
 const mensagemDeErro = (err) =>
   err?.response?.data?.error || err?.message || 'Unknown error'
 
@@ -93,7 +95,7 @@ const initialState = {
   redBans:   [null, null, null, null, null],
   bluePicks: [null, null, null, null, null],
   redPicks:  [null, null, null, null, null],
-  agTeam: {}, // GA's picks as { role: championName }, used for /suggest and /predict
+  agTeam: {}, // opponent picks as { role: championName } (kept for reference)
 }
 
 function draftReducer(state, action) {
@@ -127,25 +129,27 @@ export const Draft = memo(() => {
   const meuTime = history.location.state?.meuTime
   // Campeões marcados na etapa Fearless (antes da escolha do lado)
   const fearlessChampions = history.location.state?.fearless || []
+  // Times e jogadores escolhidos na etapa anterior ({ blue: {team, players}, red: {...} })
+  const lados = history.location.state?.lados || { blue: { team: null, players: {} }, red: { team: null, players: {} } }
 
   const [draft, dispatch]                             = useReducer(draftReducer, initialState)
-  const [targetComposition, setTargetComposition]     = useState(null)
   const [loading, setLoading]                         = useState(false)
   const [solicitacaoPendente, setSolicitacaoPendente] = useState(false)
   const [userRoles, setUserRoles]                     = useState([null, null, null, null, null])
-  const [loadingPredicao, setLoadingPredicao]         = useState(false)
   const [predicao, setPredicao]                       = useState(null)
+  const [sugestao, setSugestao]                       = useState(null)
+  const [carregandoSugestao, setCarregandoSugestao]   = useState(false)
+  const [mostrarScout, setMostrarScout]               = useState(false)
   const [erro, setErro]                               = useState(null)
-  const [tentativaInicio, setTentativaInicio]         = useState(0)
 
-  const { step, blueBans, redBans, bluePicks, redPicks, agTeam } = draft
+  const { step, blueBans, redBans, bluePicks, redPicks } = draft
 
   const isDraftComplete  = step >= 20
   const currentPhase     = isDraftComplete ? null : DRAFT_SEQUENCE[step].phase
   const currentTeam      = isDraftComplete ? null : DRAFT_SEQUENCE[step].team
   const isAITurn         = !isDraftComplete && currentTeam !== meuTime
-  const userPicks        = meuTime === 'BLUE' ? bluePicks : redPicks
-  const allRolesAssigned = userRoles.every(r => r !== null)
+  const userSide         = meuTime === 'BLUE' ? 'blue' : 'red'
+  const aiSide           = meuTime === 'BLUE' ? 'red' : 'blue'
 
   // Slot index of whichever card should be highlighted as "active" right now
   const currentBlueBanSlot  = !isDraftComplete && currentPhase === 'ban'  && currentTeam === 'BLUE' ? BLUE_BAN_STEPS.indexOf(step)  : -1
@@ -167,16 +171,18 @@ export const Draft = memo(() => {
     if (!meuTime) history.replace('/')
   }, [meuTime, history])
 
-  // ── Call /start to get the initial targetComposition (Fearless incluído) ──
-  useEffect(() => {
-    if (!meuTime) return
-    const agSide   = meuTime === 'BLUE' ? 'red' : 'blue'
-    const userSide = meuTime === 'BLUE' ? 'blue' : 'red'
-    setErro(null)
-    iniciarSessao({ agSide, userSide, fearless: fearlessChampions.map(c => c.name) })
-      .then((sessao) => setTargetComposition(sessao.targetComposition))
-      .catch((err) => setErro(`Could not start the draft: ${mensagemDeErro(err)}`))
-  }, [tentativaInicio]) // eslint-disable-line react-hooks/exhaustive-deps
+  // ── Estado do draft no formato da API (picks com rota; rota nula = a API escolhe a mais provável) ──
+  const estadoApi = useCallback(() => {
+    const picksDo = (picks, ehUsuario) => picks
+      .map((p, i) => p && { champion: p.campeao.name, role: ehUsuario ? (userRoles[i] || null) : (p.rota?.value || null) })
+      .filter(Boolean)
+    return {
+      blue: { ...lados.blue, picks: picksDo(bluePicks, meuTime === 'BLUE') },
+      red:  { ...lados.red,  picks: picksDo(redPicks,  meuTime === 'RED') },
+      bans: [...blueBans, ...redBans].filter(Boolean).map(c => c.name),
+      fearless: fearlessChampions.map(c => c.name),
+    }
+  }, [lados, bluePicks, redPicks, blueBans, redBans, userRoles, meuTime, fearlessChampions])
 
   // ── Record a step and advance ─────────────────────────────────────────────
   const confirmarPasso = useCallback((champion, rota = null) => {
@@ -191,94 +197,79 @@ export const Draft = memo(() => {
         slot: isBlue ? BLUE_BAN_STEPS.indexOf(step) : RED_BAN_STEPS.indexOf(step),
       })
     } else {
-      dispatch({
-        type: 'PICK', champion, rota, isBlue, isAI,
-        slot: isBlue ? BLUE_PICK_STEPS.indexOf(step) : RED_PICK_STEPS.indexOf(step),
-      })
+      const slot = isBlue ? BLUE_PICK_STEPS.indexOf(step) : RED_PICK_STEPS.indexOf(step)
+      if (!isAI && rota) {
+        setUserRoles(prev => { const next = [...prev]; next[slot] = rota.value; return next })
+      }
+      dispatch({ type: 'PICK', champion, rota: isAI ? rota : null, isBlue, isAI, slot })
     }
+    setSugestao(null)
     setSolicitacaoPendente(false)
   }, [step, meuTime])
 
-  // ── AI turn: call /suggest and confirm result ─────────────────────────────
+  // ── Vez do adversário: jogada provável do time real (modelo do adversário) ──
   const chamarIA = useCallback(async () => {
     if (solicitacaoPendente || erro) return
     setSolicitacaoPendente(true)
     setLoading(true)
-
     try {
       const { phase } = DRAFT_SEQUENCE[step]
-      const bannedNames   = [...blueBans.filter(Boolean).map(c => c.name), ...redBans.filter(Boolean).map(c => c.name)]
-      const userTeamNames = meuTime === 'RED'
-        ? redPicks.filter(Boolean).map(p => p.campeao.name)
-        : bluePicks.filter(Boolean).map(p => p.campeao.name)
-
-      const sugestao = await getSugestao({
-        goal:              phase === 'ban' ? 'ban' : 'pick',
-        agTeam,
-        userTeam:          userTeamNames,
-        banned:            bannedNames,
-        fearless:          fearlessChampions.map(c => c.name),
-        targetComposition,
-      })
-
-      // Keep targetComposition fresh for the next /suggest call
-      if (sugestao.targetComposition) {
-        setTargetComposition(sugestao.targetComposition)
-      }
-
-      const campeao = findChampion(sugestao.champion)
+      const jogada = await getJogadaAdversario({ side: aiSide, goal: phase, state: estadoApi() })
+      const campeao = findChampion(jogada.champion)
       if (!campeao) {
-        setErro(`The AI chose "${sugestao.champion}", which is missing from the local champion list.`)
+        setErro(`The opponent chose "${jogada.champion}", which is missing from the local champion list.`)
         setSolicitacaoPendente(false)
         return
       }
-      const rota = sugestao.role
-        ? { value: sugestao.role, label: ROLE_LABELS[sugestao.role] || sugestao.role }
-        : null
-
+      const rota = jogada.role ? { value: jogada.role, label: ROLE_LABELS[jogada.role] || jogada.role } : null
       confirmarPasso(campeao, rota)
     } catch (err) {
-      setErro(`The AI could not make its move: ${mensagemDeErro(err)}`)
+      setErro(`The opponent could not make its move: ${mensagemDeErro(err)}`)
       setSolicitacaoPendente(false)
     } finally {
       setLoading(false)
     }
-  }, [solicitacaoPendente, erro, step, meuTime, blueBans, redBans, bluePicks, redPicks, agTeam, fearlessChampions, targetComposition, confirmarPasso])
+  }, [solicitacaoPendente, erro, step, aiSide, estadoApi, confirmarPasso])
 
-  // ── Trigger AI on its turn (after /start has returned, while there is no error) ──
   useEffect(() => {
-    if (targetComposition && !erro && !isDraftComplete && isAITurn && !solicitacaoPendente && !loading) {
-      chamarIA()
+    if (!erro && !isDraftComplete && isAITurn && !solicitacaoPendente && !loading) {
+      const t = setTimeout(chamarIA, 400)
+      return () => clearTimeout(t)
     }
-  }, [step, targetComposition, erro, isDraftComplete, isAITurn, solicitacaoPendente, loading, chamarIA])
+  }, [step, erro, isDraftComplete, isAITurn, solicitacaoPendente, loading, chamarIA])
+
+  // ── Vez do usuário: sugestão explicada (pick ou ban) ──
+  useEffect(() => {
+    if (!meuTime || isDraftComplete || isAITurn) return
+    let ativo = true
+    setCarregandoSugestao(true)
+    getSugestao({ side: userSide, goal: currentPhase, state: estadoApi() })
+      .then((s) => { if (ativo) setSugestao(s) })
+      .catch((err) => { if (ativo) setSugestao(null); console.warn('suggest', mensagemDeErro(err)) })
+      .finally(() => { if (ativo) setCarregandoSugestao(false) })
+    return () => { ativo = false }
+  }, [step]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── Análise ao vivo: previsão explicada a cada passo e a cada troca de rota ──
+  useEffect(() => {
+    if (!meuTime) return
+    const st = estadoApi()
+    let ativo = true
+    getPredicao({ blue: st.blue, red: st.red })
+      .then((r) => { if (ativo) setPredicao(r) })
+      .catch((err) => { if (ativo) setErro(`Could not analyse the draft: ${mensagemDeErro(err)}`) })
+    return () => { ativo = false }
+  }, [step, userRoles]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const usarSugestao = (s) => {
+    const campeao = findChampion(s.champion)
+    if (!campeao || bloqueados.some(c => c.id === campeao.id)) return
+    const rota = currentPhase === 'pick' && s.role ? { value: s.role, label: ROLE_LABELS[s.role] } : null
+    confirmarPasso(campeao, rota)
+  }
 
   const tentarNovamente = () => {
     setErro(null)
-    if (!targetComposition) setTentativaInicio((n) => n + 1)
-  }
-
-  // ── Fetch prediction on explicit user request ─────────────────────────────
-  const handlePredict = async () => {
-    setLoadingPredicao(true)
-    setErro(null)
-    try {
-      const userSide = meuTime.toLowerCase()
-      const aiSide   = meuTime === 'BLUE' ? 'red' : 'blue'
-      const paramsPredicao = {
-        ...Object.fromEntries(
-          Object.entries(agTeam).map(([role, champ]) => [`${role}_${aiSide}`, champ])
-        ),
-        ...Object.fromEntries(
-          userRoles.map((role, i) => [`${role}_${userSide}`, userPicks[i].campeao.name])
-        ),
-      }
-      const result = await getPredicao(paramsPredicao)
-      setPredicao(result)
-    } catch (err) {
-      setErro(`Could not predict the winner: ${mensagemDeErro(err)}`)
-    } finally {
-      setLoadingPredicao(false)
-    }
   }
 
   // ─── Render ───────────────────────────────────────────────────────────────
@@ -289,16 +280,6 @@ export const Draft = memo(() => {
       <Button height={35} onClick={tentarNovamente}>Try again</Button>
     </Box>
   )
-
-  if (!targetComposition) {
-    return (
-      <Box display="flex" flex={1} flexDirection="column" alignItems="center" justifyContent="center" minHeight="100vh">
-        {erro ? avisoDeErro : (
-          <Text fontWeight={3} fontSize={20} color="textColor">Preparing draft…</Text>
-        )}
-      </Box>
-    )
-  }
 
   return (
     <Box display="flex" flex={1} p={15} flexDirection="column">
@@ -311,7 +292,7 @@ export const Draft = memo(() => {
           </Text>
           {!isDraftComplete && (
             <Text fontSize={16} color="textColor" style={{ marginLeft: 12, opacity: 0.7 }}>
-              {currentTeam === meuTime ? 'Your turn' : 'AI thinking…'}
+              {currentTeam === meuTime ? 'Your turn' : 'Opponent thinking…'}
             </Text>
           )}
         </Box>
@@ -326,7 +307,7 @@ export const Draft = memo(() => {
           <Box mt={18} flexDirection="column">
             <Box mb={5}>
               <Text fontWeight={3} fontSize={18} color="textColor">
-                Blue Side {meuTime === 'BLUE' ? '(Your team)' : '(AI team)'}
+                Blue Side {meuTime === 'BLUE' ? '(Your team)' : '(Opponent)'}
               </Text>
             </Box>
             {bluePicks.map((invocador, i) => (
@@ -355,13 +336,6 @@ export const Draft = memo(() => {
                 )}
               </CardBlueSide>
             ))}
-            {meuTime === 'BLUE' && isDraftComplete && (
-              <Box mt={10}>
-                <Button disabled={!allRolesAssigned || loadingPredicao} onClick={handlePredict}>
-                  {loadingPredicao ? 'Predicting…' : 'Predict Winner'}
-                </Button>
-              </Box>
-            )}
           </Box>
         </Box>
 
@@ -408,7 +382,7 @@ export const Draft = memo(() => {
           <Box mt={18} flexDirection="column">
             <Box mb={5} display="flex" justifyContent="flex-end">
               <Text fontWeight={3} fontSize={18} color="textColor">
-                Red Side {meuTime === 'RED' ? '(Your team)' : '(AI team)'}
+                Red Side {meuTime === 'RED' ? '(Your team)' : '(Opponent)'}
               </Text>
             </Box>
             {redPicks.map((invocador, i) => (
@@ -437,40 +411,37 @@ export const Draft = memo(() => {
                 )}
               </CardRedSide>
             ))}
-            {meuTime === 'RED' && isDraftComplete && (
-              <Box mt={10} display="flex" justifyContent="flex-end">
-                <Button disabled={!allRolesAssigned || loadingPredicao} onClick={handlePredict}>
-                  {loadingPredicao ? 'Predicting…' : 'Predict Winner'}
-                </Button>
-              </Box>
-            )}
           </Box>
         </Box>
 
       </Box>
 
-      {/* ── Prediction result ── */}
-      {predicao && (
-        <Box pt={5} mt={5} display="flex" alignItems="center" flexDirection="column" style={{ borderTop: '1px solid yellow' }}>
-          <Text mb={3} fontWeight={3} fontSize={18} color="textColor">
-            <span role="img" aria-label="robot">🤖</span>
-            {' '}{predicao.predicted_winner} team is the predicted winner
-            {' '}({Math.round(predicao.win_probability * 100)}%)
-          </Text>
-          {predicao.confidence && (
-            <Text mb={3} fontSize={14} color="textColor" style={{ opacity: 0.8 }}>
-              Confidence: {CONFIDENCE_LABELS[predicao.confidence] || predicao.confidence}
-            </Text>
+      {/* ── Sugestões, análise e preparação ── */}
+      <Box display="flex" mt={5} style={{ gap: 12, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+        <Box style={{ flex: 1, minWidth: 320, display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {!isDraftComplete && !isAITurn && (
+            <Advisor dados={sugestao} carregando={carregandoSugestao} onUsar={usarSugestao} desabilitado={loading} />
           )}
-          {(predicao.key_factors || []).map((f) => (
-            <Text key={f.factor} fontSize={14} color="textColor" style={{ opacity: 0.8 }}>
-              • {f.label}
-            </Text>
-          ))}
-          <Box mt={5} />
-          <Button onClick={() => history.push('/')}>Try again</Button>
+          {lados[aiSide]?.team && (
+            <>
+              <Box>
+                <SmallButton onClick={() => setMostrarScout(v => !v)}>
+                  {mostrarScout ? 'Hide opponent scouting' : 'Show opponent scouting'}
+                </SmallButton>
+              </Box>
+              {mostrarScout && (
+                <Scout team={lados[aiSide].team} opponent={lados[userSide]?.team} players={lados[aiSide].players} />
+              )}
+            </>
+          )}
+          {isDraftComplete && (
+            <Box><Button onClick={() => history.push('/')}>New draft</Button></Box>
+          )}
         </Box>
-      )}
+        <Box style={{ flex: 1, minWidth: 320 }}>
+          <Analysis dados={predicao} final={isDraftComplete} />
+        </Box>
+      </Box>
 
     </Box>
   )

@@ -12,6 +12,7 @@ import { Box } from 'components/Box'
 import bg from 'assets/background.jpg'
 import { Side } from 'pages/Side'
 import { Fearless } from 'pages/Fearless'
+import { Teams } from 'pages/Teams'
 
 const BackgroundImage = styled(Box)`
   background-image: url(${bg});
@@ -46,6 +47,9 @@ export default () => {
             </Route>
             <Route path="/side">
               <Side />
+            </Route>
+            <Route path="/teams">
+              <Teams />
             </Route>
             <Route path="/draft">
               <Draft />

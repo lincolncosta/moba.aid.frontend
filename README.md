@@ -19,7 +19,7 @@ A interface imita a tela de seleção do cliente do jogo. Toda a inteligência (
 ## Stack
 
 - React 16 com Create React App (`react-scripts` 3.4.3)
-- React Router 5 (rotas `/`, `/fearless`, `/side`, `/draft`)
+- React Router 5 (rotas `/`, `/fearless`, `/side`, `/teams`, `/draft`)
 - styled-components + styled-system para layout e tema
 - axios para as chamadas à API
 - Imagens dos campeões servidas pelo Data Dragon da Riot (`ddragon.leagueoflegends.com`)
@@ -68,10 +68,10 @@ yarn build:production      # usa .env.production
 
 1. **Home (`/`)**: apresentação e botão *Start*.
 2. **Fearless (`/fearless`)**: etapa extra, antes de tudo. O usuário marca quantos campeões quiser (os já usados na série); eles ficam indisponíveis para os dois times durante o *draft* inteiro. *Skip* segue sem nenhum.
-3. **Side (`/side`)**: o usuário escolhe jogar de azul ou vermelho. Lado e lista Fearless vão para a próxima tela via `history.location.state` (`meuTime`, `fearless`). Acessar `/draft` direto, sem lado, volta para a Home.
-4. **Draft (`/draft`)**:
-   1. Ao montar, chama `POST /start` com a lista Fearless e guarda a `targetComposition` (o plano de 5 campeões do AG, já sem os campeões Fearless). A tela só aparece depois dessa resposta.
-   2. Percorre a sequência oficial de 20 turnos:
+3. **Side (`/side`)**: o usuário escolhe jogar de azul ou vermelho.
+4. **Times e jogadores (`/teams`)**: chama `GET /teams` e mostra dois quadros (seu time e o adversário). Escolhido o time (com filtro por liga), o elenco mais recente aparece preenchido e cada rota pode ser trocada por qualquer jogador profissional daquela rota. Com o adversário escolhido, aparece o quadro **Preparation** (`POST /scout`): bans e picks iniciais prováveis, assinatura do time e campeões recentes de cada jogador. *Skip (champions only)* segue sem times (a força conta como neutra e só o draft e o lado entram na previsão). Lado, Fearless e `lados` (`{ blue: {team, players}, red: {...} }`) vão para o Draft via `history.location.state`. Acessar `/draft` direto, sem lado, volta para a Home.
+5. **Draft (`/draft`)**:
+   1. Percorre a sequência oficial de 20 turnos:
 
       | Turnos | Ação | Ordem |
       |---|---|---|
@@ -80,10 +80,10 @@ yarn build:production      # usa .env.production
       | 12–15 | Bans fase 2 | Vermelho, Azul × 2 |
       | 16–19 | Picks fase 2 | Vermelho, Azul, Azul, Vermelho |
 
-   3. Na vez do usuário, ele escolhe um campeão na grade e confirma. Campeões já banidos ou escolhidos ficam bloqueados.
-   4. Na vez do AG, a tela chama `POST /suggest` automaticamente e aplica o campeão (e o papel, se for pick) devolvido.
-   5. Terminado o *draft*, o usuário atribui um papel a cada um dos seus 5 campeões e clica em *Predict Winner*, que chama `POST /predict`. A tela mostra o lado previsto como vencedor, a probabilidade, a faixa de confiança e os três fatores (`key_factors`), e um botão para recomeçar.
-   6. Se `/start`, `/suggest` ou `/predict` falhar, a tela mostra a mensagem de erro e um botão *Try again*; o AG não tenta de novo sozinho.
+   2. **Vez do usuário**: o quadro **Pick/Ban suggestion** chama `POST /suggest` (`side` = lado do usuário). Mostra a sugestão com o ganho de draft em pontos percentuais (campeão + counters), os jogos do jogador naquele campeão (só informação), contra quem o campeão é bom ou fraco (só ordem), alternativas, uma ideia de composição para as rotas abertas e o aviso quando parte do ganho está fora da faixa dos drafts reais. *Use* aplica a sugestão (com a rota); o usuário também pode escolher qualquer campeão na grade e ajustar a rota no seletor do card.
+   3. **Vez do adversário**: a tela chama `POST /opponent/move`, que devolve a jogada mais provável do time real escolhido (modelo do adversário da etapa 2, E10), com a rota.
+   4. **Análise ao vivo**: a cada passo (e a cada troca de rota) a tela chama `POST /predict` com o draft parcial e mostra a probabilidade, o ponto de partida (confronto espelhado, só o lado), a força (times + jogadores) e o draft (campeões + counters) em pp, jogadores e campeões rota a rota (jungle marcada como incerta), os confrontos mais fortes só como ordem, a fase de rotas (ouro aos 15 min, não é chance de vitória) e o perfil descritivo das composições.
+   5. Se `/opponent/move` ou `/predict` falhar, a tela mostra a mensagem e um botão *Try again*.
 
 Todo o estado do *draft* fica no `useReducer` de `src/pages/Draft/Draft.js`; o backend não guarda sessão.
 
@@ -93,19 +93,14 @@ Funções em `src/api/`:
 
 | Arquivo | Função | Rota | Corpo |
 |---|---|---|---|
-| `sessao.js` | `iniciarSessao` | `POST /start` | `{ agSide, userSide, fearless }` |
-| `sugestao.js` | `getSugestao` | `POST /suggest` | `{ goal, agTeam, userTeam, banned, fearless, targetComposition }` |
-| `predicao.js` | `getPredicao` | `POST /predict` | `{ top_blue, jng_blue, ..., sup_red }` |
+| `times.js` | `getTimes` | `GET /teams` | — |
+| `adversario.js` | `getScout` | `POST /scout` | `{ team, opponent, players }` |
+| `adversario.js` | `getJogadaAdversario` | `POST /opponent/move` | `{ side, goal, state }` |
+| `sugestao.js` | `getSugestao` | `POST /suggest` | `{ side, goal, state }` |
+| `predicao.js` | `getPredicao` | `POST /predict` | `{ blue, red }` |
+| `sessao.js` | `iniciarSessao` | `POST /start` | não é mais usado (AG antigo) |
 
-Montagem dos dados em `Draft.js`:
-
-- `goal`: `"ban"` ou `"pick"`, conforme o turno.
-- `agTeam`: picks do AG como `{ papel: nome }`, preenchido com o `role` devolvido por `/suggest`.
-- `userTeam`: nomes dos picks do usuário, sem papel (o papel só é definido no fim).
-- `banned`: bans dos dois lados.
-- `fearless`: nomes marcados na etapa Fearless (enviados em todas as chamadas).
-- `targetComposition`: o último valor recebido de `/start` ou `/suggest`.
-- O campeão devolvido pela API é procurado em `src/database/champions.json` pelo `name` e, se não achar, pelo `alias` (necessário para casos como "Nunu & Willump").
+`state = { blue, red, bans, fearless }`, com cada lado no formato `{ team, players: { rota: id }, picks: [{ champion, role }] }`. Picks do usuário sem rota vão com `role: null` e a API usa a rota mais provável do campeão. O campeão devolvido pela API é procurado em `src/database/champions.json` pelo `name` e, se não achar, pelo `alias`.
 
 O contrato completo da API está no README do [`compgap`](https://github.com/lincolncosta/compgap#endpoints-da-api).
 
@@ -120,8 +115,13 @@ src/
 │   ├── Home/                 # Tela inicial
 │   ├── Fearless/             # Bans livres da série, antes da escolha do lado
 │   ├── Side/                 # Escolha do lado
-│   └── Draft/                # Tela do draft (estado, chamadas ao AG e predição)
+│   ├── Teams/                # Times, jogadores e preparação contra o adversário
+│   └── Draft/                # Tela do draft (estado, sugestões, adversário simulado e análise)
 ├── components/
+│   ├── Analysis/             # Previsão explicada (blocos, rotas, fase de rotas, perfil)
+│   ├── Advisor/              # Sugestão de pick/ban com alternativas
+│   ├── Scout/                # Preparação: tendências do adversário
+│   ├── Panel/                # Estilos comuns dos painéis
 │   ├── PicksBans/            # Grade de campeões + botão de confirmação
 │   ├── Campeao/              # Ícone de um campeão na grade
 │   ├── CampeaoBanido/        # Slot de ban
